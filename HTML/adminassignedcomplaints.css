@@ -168,3 +168,28 @@ footer {
   bottom: 0;
   width: 100%;
 }
+.danger-btn {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.danger-btn:hover {
+  background-color: #c9302c;
+}
+
+.warn-btn {
+  background-color: #f0ad4e;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.warn-btn:hover {
+  background-color: #ec971f;
+}

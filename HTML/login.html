@@ -1,23 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Login - Digital Complaint & Maintenance System</title>
-    <link rel="stylesheet" href="login.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Digital Complaint System</title>
+  <link rel="stylesheet" href="login.css">
 </head>
 <body>
-    <div class="login-container">
-        <h2>Login</h2>
-        <form id="loginForm" onsubmit="return validateLogin()">
-            <input type="text" id="username" name="username" placeholder="Username" />
-            <input type="password" id="password" name="password" placeholder="Password" />
-            <button type="submit">Login</button>
-        </form>
-        <p>Don't have an account? <a href="register.html">Register here</a></p>
-        <p>&copy; 2025 Digital Complaint & Maintenance System</p>
-    </div>
+  <div class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <div class="input-group">
+        <input type="email" id="email" placeholder="Email" required>
+      </div>
+      <div class="input-group">
+        <input type="password" id="password" placeholder="Password" required>
+      </div>
+      <div class="input-group">
+        <select id="userType" required>
+          <option value="">Select User Type</option>
+          <option value="student">Student</option>
+          <option value="staff">Maintenance Staff</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <button type="submit">Login</button>
+      <div class="links">
+        <a href="register.html">Create account</a>
+        <a href="forgot-password.html">Forgot password?</a>
+      </div>
+    </form>
+    <p class="footer-note">© 2025 Digital Complaint & Maintenance System</p>
+  </div>
 
-    <script src="login.js"></script>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value.trim().toLowerCase();
+      const password = document.getElementById('password').value;
+      const userType = document.getElementById('userType').value;
+
+      // Demo users database
+      const users = {
+        'admin@example.com': { 
+          password: 'admin123', 
+          type: 'admin',
+          name: 'Admin User'
+        },
+        'staff@example.com': { 
+          password: 'staff123', 
+          type: 'staff',
+          name: 'Maintenance Staff'
+        },
+        'student@example.com': { 
+          password: 'student123', 
+          type: 'student',
+          name: 'Student User'
+        }
+      };
+
+      // Validation
+      if (!email || !password || !userType) {
+        alert('Please fill in all fields');
+        return;
+      }
+
+      if (!users[email]) {
+        alert('Email not found');
+        return;
+      }
+
+      if (users[email].password !== password) {
+        alert('Incorrect password');
+        return;
+      }
+
+      if (users[email].type !== userType) {
+        alert(`This email is registered as ${users[email].type}`);
+        return;
+      }
+
+      // Create session
+      localStorage.setItem('auth', JSON.stringify({
+        email: email,
+        type: userType,
+        name: users[email].name,
+        loggedIn: true,
+        timestamp: new Date().getTime()
+      }));
+
+      // Redirect to dashboard
+      const dashboards = {
+        'admin': 'admindashboard.html',
+        'staff': 'staffdashboard.html',
+        'student': 'studentdashboard.html'
+      };
+      window.location.href = dashboards[userType];
+    });
+
+    // Auto-redirect if already logged in
+    document.addEventListener('DOMContentLoaded', function() {
+      const auth = JSON.parse(localStorage.getItem('auth'));
+      if (auth && auth.loggedIn) {
+        const dashboards = {
+          'admin': 'admindashboard.html',
+          'staff': 'staffdashboard.html',
+          'student': 'studentdashboard.html'
+        };
+        if (dashboards[auth.type]) {
+          window.location.href = dashboards[auth.type];
+        }
+      }
+    });
+  </script>
 </body>
 </html>

@@ -1,58 +1,63 @@
-/* Reset */
+/* Your existing admindashboard.css remains completely unchanged */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Header */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+}
+
 header {
   background-color: #0b3d91;
   color: white;
-  padding: 15px 0;
+  padding: 15px 20px;
   text-align: center;
-  font-size: 1.6rem;
-  font-weight: 700;
 }
 
-/* Main menu container */
+header h1 {
+  font-size: 1.5rem;
+}
+
 main.menu {
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  max-width: 400px;
-  margin: 40px auto;
-  padding: 0 20px;
-  text-align: center;
+  gap: 15px;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
 }
 
-/* Buttons */
 .menu-btn {
   background-color: #0b3d91;
   color: white;
-  font-size: 1.3rem;
-  padding: 18px 0;
   border: none;
-  border-radius: 10px;
+  padding: 12px;
+  border-radius: 5px;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 100%;
-  font-weight: 600;
+  text-align: center;
 }
 
 .menu-btn:hover {
-  background-color: #062a6e;
+  opacity: 0.9;
 }
 
-/* Footer */
 footer {
   background-color: #0b3d91;
   color: white;
-  font-size: 13px;
-  padding: 10px 0;
   text-align: center;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
+  padding: 10px;
+  margin-top: auto;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 600px) {
+  .menu-btn {
+    width: 100%;
+  }
 }

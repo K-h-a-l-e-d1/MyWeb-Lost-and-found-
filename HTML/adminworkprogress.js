@@ -1,116 +1,121 @@
-// Dummy data representing work progress
-let workTasks = [
+// 1. TASK DATA (Simulated Database)
+const tasks = [
   {
-    id: 1,
+    id: 101,
     category: "Facilities",
-    description: "Fix broken fan in Room 204.",
-    staff: "Abdullah Khan",
-    assignDate: "2025-07-01",
-    status: "Assigned"
+    description: "Fix broken AC in Lab 2",
+    assignedTo: "Abdullah Khan",
+    date: "2025-06-25",
+    status: "Overdue"
   },
   {
-    id: 2,
-    category: "Technical Support",
-    description: "Repair WiFi in Lab 3.",
-    staff: "Abdullah Khan",
-    assignDate: "2025-07-03",
+    id: 102,
+    category: "Technical",
+    description: "WiFi not working in Block B",
+    assignedTo: "Ayesha Rahman",
+    date: "2025-07-01",
     status: "In Progress"
-  },
-  {
-    id: 3,
-    category: "Administrative",
-    description: "Issue ID card printing delay.",
-    staff: "Abdullah Khan",
-    assignDate: "2025-07-02",
-    status: "Completed"
   }
 ];
 
-// Render tasks in the table
-function renderTasks(data) {
-  const tbody = document.getElementById("workProgressBody");
-  tbody.innerHTML = "";
+// 2. INITIALIZE PAGE
+document.addEventListener('DOMContentLoaded', function() {
+  renderTasks();
+  updateYear();
+});
 
-  data.forEach(task => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${task.id}</td>
-      <td>${task.category}</td>
-      <td>${task.description}</td>
-      <td>${task.staff}</td>
-      <td>${task.assignDate}</td>
-      <td>${task.status}</td>
-      <td>
-        <select onchange="updateStatus(${task.id}, this.value)">
-          <option value="Assigned" ${task.status === "Assigned" ? "selected" : ""}>Assigned</option>
-          <option value="In Progress" ${task.status === "In Progress" ? "selected" : ""}>In Progress</option>
-          <option value="Completed" ${task.status === "Completed" ? "selected" : ""}>Completed</option>
-          <option value="Delayed" ${task.status === "Delayed" ? "selected" : ""}>Delayed</option>
-        </select>
-      </td>
-      <td><button onclick="viewTask(${task.id})">View</button></td>
+// 3. RENDER TASKS IN TABLE
+function renderTasks() {
+  const tableBody = document.querySelector('#tasksTable tbody');
+  tableBody.innerHTML = '';
+
+  tasks.forEach(task => {
+    const row = `
+      <tr>
+        <td>${task.id}</td>
+        <td>${task.category}</td>
+        <td>${task.description}</td>
+        <td>${task.status}</td>
+        <td>
+          <button onclick="openWarning(${task.id})">⚠️ Warning</button>
+        </td>
+      </tr>
     `;
-    tbody.appendChild(row);
+    tableBody.innerHTML += row;
   });
 }
 
-// Apply filter by category and date
-function applyFilter() {
-  const category = document.getElementById("filterCategory").value;
-  const fromDate = document.getElementById("fromDate").value;
-  const toDate = document.getElementById("toDate").value;
+// 4. FILTER TASKS
+function filterTasks() {
+  const category = document.getElementById('filterCategory').value;
+  const date = document.getElementById('filterDate').value;
 
-  const filtered = workTasks.filter(task => {
-    const matchCategory = category === "" || task.category === category;
-    const matchFrom = !fromDate || task.assignDate >= fromDate;
-    const matchTo = !toDate || task.assignDate <= toDate;
-    return matchCategory && matchFrom && matchTo;
+  const filtered = tasks.filter(task => {
+    return (category === '' || task.category === category) &&
+           (date === '' || task.date === date);
   });
 
-  renderTasks(filtered);
+  renderFilteredTasks(filtered);
 }
 
-// Update the status of a task in data and re-render
-function updateStatus(id, newStatus) {
-  const task = workTasks.find(t => t.id === id);
-  if (task) {
-    task.status = newStatus;
-    renderTasks(workTasks);
-  }
+function renderFilteredTasks(filteredTasks) {
+  const tableBody = document.querySelector('#tasksTable tbody');
+  tableBody.innerHTML = '';
+
+  filteredTasks.forEach(task => {
+    const row = `
+      <tr>
+        <td>${task.id}</td>
+        <td>${task.category}</td>
+        <td>${task.description}</td>
+        <td>${task.status}</td>
+        <td>
+          <button onclick="openWarning(${task.id})">⚠️ Warning</button>
+        </td>
+      </tr>
+    `;
+    tableBody.innerHTML += row;
+  });
 }
 
-// Show task details in popup modal
-function viewTask(id) {
-  const task = workTasks.find(t => t.id === id);
-  if (!task) return;
+// 5. MODAL FUNCTIONS
+function showOverdueTasks() {
+  const overdue = tasks.filter(task => task.status === 'Overdue');
+  const list = document.getElementById('overdueList');
+  list.innerHTML = '';
 
-  document.getElementById("modalId").textContent = task.id;
-  document.getElementById("modalCategory").textContent = task.category;
-  document.getElementById("modalDescription").textContent = task.description;
-  document.getElementById("modalStaff").textContent = task.staff;
-  document.getElementById("modalAssignDate").textContent = task.assignDate;
-  document.getElementById("modalStatus").textContent = task.status;
+  overdue.forEach(task => {
+    list.innerHTML += `
+      <li>
+        Task ${task.id}: ${task.description}
+        <button onclick="openWarning(${task.id})">Send Warning</button>
+      </li>
+    `;
+  });
 
-  document.getElementById("taskModal").style.display = "block";
+  document.getElementById('overdueModal').style.display = 'block';
 }
 
-// Close modal setup
-function setupModal() {
-  const modal = document.getElementById("taskModal");
-  const closeBtn = document.getElementById("modalClose");
-
-  closeBtn.onclick = () => {
-    modal.style.display = "none";
-  };
-
-  window.onclick = (event) => {
-    if (event.target === modal) {
-      modal.style.display = "none";
-    }
-  };
+function openWarning(taskId) {
+  const task = tasks.find(t => t.id === taskId);
+  document.getElementById('warningText').value = 
+    `URGENT: Task ${taskId} (${task.description}) is ${task.status}. Please resolve immediately.`;
+  document.getElementById('warningModal').style.display = 'block';
 }
 
-window.onload = () => {
-  renderTasks(workTasks);
-  setupModal();
-};
+function closeModal() {
+  document.querySelectorAll('.modal').forEach(modal => {
+    modal.style.display = 'none';
+  });
+}
+
+function sendWarning() {
+  const message = document.getElementById('warningText').value;
+  alert(`Warning sent to staff:\n\n${message}`);
+  closeModal();
+}
+
+// 6. UTILITY FUNCTIONS
+function updateYear() {
+  document.getElementById('currentYear').textContent = new Date().getFullYear();
+}

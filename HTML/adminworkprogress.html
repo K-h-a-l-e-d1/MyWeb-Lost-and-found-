@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Work Progress - Admin</title>
-  <link rel="stylesheet" href="adminworkprogress.css" />
+  <link rel="stylesheet" href="adminworkprogress.css">
 </head>
 <body>
   <header>
@@ -13,11 +13,16 @@
   </header>
 
   <main>
+    <!-- Overdue Tasks Notification -->
+    <div id="overdueAlert" class="notification">
+      <span>⚠️ 3 tasks overdue by 7+ days!</span>
+      <button onclick="showOverdueTasks()">View & Reply</button>
+    </div>
+
     <!-- Filters -->
-    <section class="filters">
-      <label for="filterCategory">Category:</label>
+    <div class="filters">
       <select id="filterCategory">
-        <option value="">-- All Categories --</option>
+        <option value="">All Categories</option>
         <option value="Facilities">Facilities</option>
         <option value="Technical Support">Technical Support</option>
         <option value="Academic Issues">Academic Issues</option>
@@ -25,58 +30,58 @@
         <option value="Harassment/Bullying">Harassment/Bullying</option>
         <option value="Other">Other</option>
       </select>
-
+      
       <label for="fromDate">From:</label>
-      <input type="date" id="fromDate" />
-
+      <input type="date" id="fromDate">
+      
       <label for="toDate">To:</label>
-      <input type="date" id="toDate" />
+      <input type="date" id="toDate">
+      
+      <button onclick="filterTasks()">Apply Filter</button>
+    </div>
 
-      <button onclick="applyFilter()">Apply Filter</button>
-    </section>
-
-    <table>
+    <!-- Tasks Table -->
+    <table id="tasksTable">
       <thead>
         <tr>
           <th>ID</th>
           <th>Category</th>
           <th>Description</th>
-          <th>Assigned Staff</th>
-          <th>Date Assigned</th>
+          <th>Assigned To</th>
+          <th>Date</th>
           <th>Status</th>
-          <th>Update Status</th>
-          <th>Actions</th>
+          <th>Action</th>
         </tr>
       </thead>
-      <tbody id="workProgressBody">
-        <!-- JS will populate tasks here -->
+      <tbody>
+        <!-- Filled by JavaScript -->
       </tbody>
     </table>
   </main>
 
   <footer>
-    <p>&copy; <span id="year"></span> Digital Complaint & Maintenance System</p>
+    <p>&copy; 2025 Digital Complaint & Maintenance System</p>
   </footer>
 
-  <!-- Modal Popup -->
-  <div id="taskModal" class="modal">
+  <!-- Modals -->
+  <div id="overdueModal" class="modal">
     <div class="modal-content">
-      <span id="modalClose" class="modal-close">&times;</span>
-      <div class="modal-header">Task Details</div>
-      <div class="modal-body">
-        <div class="modal-field"><strong>ID:</strong> <span id="modalId"></span></div>
-        <div class="modal-field"><strong>Category:</strong> <span id="modalCategory"></span></div>
-        <div class="modal-field"><strong>Description:</strong> <span id="modalDescription"></span></div>
-        <div class="modal-field"><strong>Assigned Staff:</strong> <span id="modalStaff"></span></div>
-        <div class="modal-field"><strong>Date Assigned:</strong> <span id="modalAssignDate"></span></div>
-        <div class="modal-field"><strong>Status:</strong> <span id="modalStatus"></span></div>
-      </div>
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h3>Overdue Tasks</h3>
+      <ul id="overdueList"></ul>
     </div>
   </div>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
-  <script src="workprogress.js"></script>
+  <div id="warningModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h3>Send Warning</h3>
+      <textarea id="warningText" placeholder="Your warning message..."></textarea>
+      <button onclick="sendWarning()">Send Warning</button>
+      <button onclick="closeModal()" class="cancel-btn">Cancel</button>
+    </div>
+  </div>
+
+  <script src="adminworkprogress.js"></script>
 </body>
 </html>

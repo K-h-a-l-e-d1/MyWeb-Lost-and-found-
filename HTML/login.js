@@ -1,35 +1,66 @@
 document.getElementById('loginForm').addEventListener('submit', function(e) {
-  e.preventDefault();
+    e.preventDefault();
+    
+    const email = document.getElementById('email').value.trim().toLowerCase();
+    const password = document.getElementById('password').value;
+    const userType = document.getElementById('userType').value;
 
-  const username = document.getElementById('username').value.trim();
-  const password = document.getElementById('password').value;
+    // Demo users - replace with real authentication
+    const users = {
+        'admin@example.com': { 
+            password: 'admin123', 
+            type: 'admin',
+            dashboard: 'admindashboard.html'  // Full filename
+        },
+        'staff@example.com': { 
+            password: 'staff123', 
+            type: 'staff',
+            dashboard: 'staffdashboard.html'
+        },
+        'student@example.com': { 
+            password: 'student123', 
+            type: 'student',
+            dashboard: 'studentdashboard.html'
+        }
+    };
 
-  // For demo, simple user-role map (replace with real backend auth later)
-  const userRoleMap = {
-    'student1': 'student',
-    'admin1': 'admin',
-    'staff1': 'maintenance',
-  };
+    // Validation
+    if (!email || !password || !userType) {
+        alert('Please fill all fields');
+        return;
+    }
 
-  if (!username || !password) {
-    alert('Please enter both username and password');
-    return;
-  }
+    if (!users[email]) {
+        alert('Email not found');
+        return;
+    }
 
-  const role = userRoleMap[username.toLowerCase()];
+    if (users[email].password !== password) {
+        alert('Incorrect password');
+        return;
+    }
 
-  if (!role) {
-    alert('Invalid username or password');
-    return;
-  }
+    if (users[email].type !== userType) {
+        alert(`Please login as ${users[email].type}`);
+        return;
+    }
 
-  alert(`Login successful as ${role}! (Simulated)`);
+    // Store session
+    localStorage.setItem('auth', JSON.stringify({
+        email: email,
+        type: userType,
+        dashboard: users[email].dashboard,  // Store complete filename
+        loggedInAt: Date.now()
+    }));
 
-  if (role === 'student') {
-    window.location.href = 'studentdashboard.html';
-  } else if (role === 'admin') {
-    window.location.href = 'admindashboard.html';
-  } else if (role === 'maintenance') {
-    window.location.href = 'staffdashboard.html';
-  }
+    // Redirect to specific dashboard
+    window.location.href = users[email].dashboard;
+});
+
+// Auto-redirect if already logged in
+window.addEventListener('DOMContentLoaded', function() {
+    const auth = JSON.parse(localStorage.getItem('auth'));
+    if (auth && auth.dashboard) {
+        window.location.href = auth.dashboard;
+    }
 });
