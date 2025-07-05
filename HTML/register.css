@@ -1,0 +1,126 @@
+/* Reset some basics */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+body {
+  background-color: #f9fafb; /* light neutral background */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header styling */
+header {
+  background-color: #0056b3; /* professional blue */
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+header nav ul {
+  list-style: none;
+  display: flex;
+  gap: 15px;
+}
+
+header nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+header nav ul li a:hover {
+  text-decoration: underline;
+}
+
+/* Register form container */
+.register-form {
+  background-color: white;
+  max-width: 420px;
+  margin: 40px auto;
+  padding: 30px 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  color: #222;
+}
+
+/* Form heading */
+.register-form h2 {
+  margin-bottom: 25px;
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+/* Form labels and inputs */
+.register-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.register-form input[type="text"],
+.register-form input[type="email"],
+.register-form input[type="password"] {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.register-form input[type="text"]:focus,
+.register-form input[type="email"]:focus,
+.register-form input[type="password"]:focus {
+  outline: none;
+  border-color: #0056b3;
+}
+
+/* Submit button */
+.register-form button {
+  width: 100%;
+  padding: 14px;
+  background-color: #0056b3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.register-form button:hover {
+  background-color: #003d80;
+}
+
+/* Footer */
+footer {
+  margin-top: auto;
+  padding: 15px 0;
+  text-align: center;
+  color: #777;
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 450px) {
+  .register-form {
+    margin: 20px 15px;
+    padding: 25px 20px;
+  }
+}

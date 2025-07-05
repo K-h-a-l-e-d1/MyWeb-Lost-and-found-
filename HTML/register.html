@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Register - Digital Complaint & Maintenance System</title>
+  <link rel="stylesheet" href="register.css" />
+</head>
+<body>
+  <header>
+    <h1>Register</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="register-form">
+    <h2>Create an Account</h2>
+    <form id="registerForm" action="register_process.php" method="POST">
+      <label for="username">Username:</label><br />
+      <input type="text" id="username" name="username" required /><br />
+
+      <label for="email">Email:</label><br />
+      <input type="email" id="email" name="email" required /><br />
+
+      <label for="password">Password:</label><br />
+      <input type="password" id="password" name="password" required /><br />
+
+      <label for="confirmPassword">Confirm Password:</label><br />
+      <input type="password" id="confirmPassword" name="confirmPassword" required /><br />
+
+      <label for="role">Select Role:</label><br />
+      <select id="role" name="role" required>
+        <option value="">-- Select Role --</option>
+        <option value="student">Student</option>
+        <option value="admin">Admin</option>
+        <option value="maintenance">Maintenance Staff</option>
+      </select><br />
+
+      <button type="submit">Register</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Digital Complaint & Maintenance System</p>
+  </footer>
+  <script src="register.js"></script>
+</body>
+</html>

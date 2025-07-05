@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Digital Complaint & Maintenance System</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <h1>Digital Complaint & Maintenance System</h1>
+    </header>
+
+    <main class="welcome">
+      <h2>Welcome</h2>
+      <p>Manage complaints and maintenance with ease.</p>
+      <div class="buttons">
+        <a href="login.html" class="btn">Login</a>
+        <a href="register.html" class="btn">Register</a>
+      </div>
+    </main>
+
+    <footer>
+      <p>&copy; <span id="year"></span> Maintenance System</p>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

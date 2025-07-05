@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="admindashboard.css" />
+</head>
+<body>
+  <header>
+    <h1>Admin Dashboard</h1>
+  </header>
+
+ <main class="menu">
+  <button onclick="location.href='admincreatetask.html'" class="menu-btn">Create New Task</button>
+  <button onclick="location.href='adminunassignedcomplaints.html'" class="menu-btn">Unassigned Complaints</button>
+  <button onclick="location.href='adminassignedcomplaints.html'" class="menu-btn">Assigned Complaints</button>
+  <button onclick="location.href='work_progress.html'" class="menu-btn">Work Progress</button>
+</main>
+
+  <footer>
+    <p>&copy; <span id="year"></span> Maintenance System</p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

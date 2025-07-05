@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Create Task - Admin</title>
+  <link rel="stylesheet" href="admincreatetask.css" />
+</head>
+<body>
+  <header>
+    <h1>Create New Maintenance Task</h1>
+    <nav>
+      <a href="admindashboard.html">⬅️ Back to Dashboard</a>
+    </nav>
+  </header>
+
+  <main>
+    <form id="createTaskForm">
+      <label for="category">Category:</label>
+      <select id="category" required>
+        <option value="">-- Select Category --</option>
+        <option value="Facilities">Facilities</option>
+        <option value="Technical Support">Technical Support</option>
+        <option value="Academic Issues">Academic Issues</option>
+        <option value="Administrative">Administrative</option>
+        <option value="Harassment/Bullying">Harassment/Bullying</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label for="description">Task Description:</label>
+      <textarea id="description" rows="4" required></textarea>
+
+      <label for="staff">Assign to:</label>
+      <select id="staff" required>
+        <option value="">-- Select Staff --</option>
+        <option value="Abdullah Khan">Abdullah Khan</option>
+      </select>
+
+      <button type="submit">Create & Assign Task</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Digital Complaint & Maintenance System</p>
+  </footer>
+
+  <script src="admincreatetask.js"></script>
+</body>
+</html>

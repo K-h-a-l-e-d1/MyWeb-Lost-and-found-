@@ -1,0 +1,83 @@
+<!-- workprogress.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Work Progress - Admin</title>
+  <link rel="stylesheet" href="workprogress.css" />
+</head>
+<body>
+  <header>
+    <h1>Work Progress</h1>
+    <nav><a href="admindashboard.html">⬅️ Back to Dashboard</a></nav>
+  </header>
+
+  <main>
+    <!-- Overdue Notification Bar -->
+    <div id="overdueNotification" class="notification-bar" style="display:none;">
+      🚨 Some tasks are pending for more than 7 days! <button onclick="showOverdueComplaints()">View</button>
+    </div>
+
+    <!-- Filter Section -->
+    <section class="filters">
+      <label for="dateFilter">Filter by Assignment Date:</label>
+      <input type="date" id="dateFilter">
+      <button onclick="filterByDate()">Apply</button>
+    </section>
+
+    <!-- Complaints Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Assigned Staff</th>
+          <th>Date Assigned</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="workProgressBody">
+        <!-- Complaints will be inserted here dynamically -->
+      </tbody>
+    </table>
+  </main>
+
+  <!-- Modal for Overdue Complaints -->
+  <div id="overdueModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('overdueModal')">&times;</span>
+      <div class="modal-header">Overdue Complaints</div>
+      <div class="modal-body" id="overdueList">
+        <!-- Overdue complaints listed here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Admin Reply/Warning -->
+  <div id="replyModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('replyModal')">&times;</span>
+      <div class="modal-header">Send Warning</div>
+      <div class="modal-body">
+        <textarea id="adminReply" rows="4" placeholder="Write your warning message..."></textarea>
+        <div class="modal-actions">
+          <button onclick="sendAdminReply()">Send</button>
+          <button onclick="closeModal('replyModal')">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; <span id="year"></span> Digital Complaint & Maintenance System</p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+  <script src="workprogress.js"></script>
+</body>
+</html>
