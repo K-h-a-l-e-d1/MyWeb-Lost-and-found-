@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Assigned Work - Maintenance Staff</title>
+  <link rel="stylesheet" href="maintenancestaffassignedwork.css" />
+</head>
+<body>
+  <header>
+    <h1>Assigned Work</h1>
+    <nav>
+      <a href="maintenancestaffdashboard.html">⬅️ Back to Dashboard</a>
+      <a href="maintenancestaffadminwarnings.html" class="warning-link">⚠️ View Warnings</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Filters -->
+    <section class="filters">
+      <label for="filterCategory">Category:</label>
+      <select id="filterCategory">
+        <option value="">All Categories</option>
+        <option value="Facilities">Facilities</option>
+        <option value="Technical Support">Technical Support</option>
+        <option value="Academic Issues">Academic Issues</option>
+      </select>
+
+      <label for="fromDate">From:</label>
+      <input type="date" id="fromDate" />
+
+      <label for="toDate">To:</label>
+      <input type="date" id="toDate" />
+
+      <button onclick="applyFilter()">Apply Filter</button>
+    </section>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Student</th>
+          <th>Title</th>
+          <th>Assigned Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>001</td>
+          <td>John Doe</td>
+          <td>Fix broken air conditioning in Room 205</td>
+          <td>2025-07-01</td>
+          <td><span class="status pending">Pending</span></td>
+          <td>
+            <button class="action-btn view-details" data-id="001">View Details</button>
+          </td>
+        </tr>
+        <tr>
+          <td>002</td>
+          <td>Jane Smith</td>
+          <td>Network connectivity issues in Lab 3</td>
+          <td>2025-07-02</td>
+          <td><span class="status in-progress">In Progress</span></td>
+          <td>
+            <button class="action-btn complete" data-id="002">Mark Complete</button>
+          </td>
+        </tr>
+        <tr>
+          <td>003</td>
+          <td>Michael Brown</td>
+          <td>Resolve grading system error</td>
+          <td>2025-07-03</td>
+          <td><span class="status completed">Completed</span></td>
+          <td>
+            <button class="action-btn view-details" data-id="003">View Details</button>
+          </td>
+        </tr>
+        <tr>
+          <td>004</td>
+          <td>Emily Clark</td>
+          <td>Update student database records</td>
+          <td>2025-07-04</td>
+          <td><span class="status overdue">Overdue</span></td>
+          <td>
+            <button class="action-btn in-progress" data-id="004">Start Work</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+
+  <footer>
+    <p>&copy; <span id="year"></span> Digital Complaint & Maintenance System</p>
+  </footer>
+
+  <!-- Modal for View Details -->
+  <div id="detailsModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close">&times;</span>
+      <div class="modal-header">Work Details</div>
+      <div class="modal-body">
+        <div class="modal-field"><strong>ID:</strong> <span id="modal-id"></span></div>
+        <div class="modal-field"><strong>Student:</strong> <span id="modal-student"></span></div>
+        <div class="modal-field"><strong>Title:</strong> <span id="modal-title"></span></div>
+        <div class="modal-field"><strong>Assigned Date:</strong> <span id="modal-date"></span></div>
+        <div class="modal-field"><strong>Status:</strong> <span id="modal-status"></span></div>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn update-status">Update Status</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Status Update -->
+  <div id="statusModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close">&times;</span>
+      <div class="modal-header">Update Status</div>
+      <div class="modal-body">
+        <div class="modal-field"><strong>Work ID:</strong> <span id="status-work-id"></span></div>
+        <div class="modal-field">
+          <label for="status-select"><strong>New Status:</strong></label>
+          <select id="status-select">
+            <option value="pending">Pending</option>
+            <option value="in-progress">In Progress</option>
+            <option value="completed">Completed</option>
+            <option value="overdue">Overdue</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn cancel-btn">Cancel</button>
+        <button class="modal-btn update-status-btn">Update</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Sample data for the work items
+    const workItems = {
+      '001': {
+        student: 'John Doe',
+        title: 'Fix broken air conditioning in Room 205',
+        date: '2025-07-01',
+        status: 'pending'
+      },
+      '002': {
+        student: 'Jane Smith',
+        title: 'Network connectivity issues in Lab 3',
+        date: '2025-07-02',
+        status: 'in-progress'
+      },
+      '003': {
+        student: 'Michael Brown',
+        title: 'Resolve grading system error',
+        date: '2025-07-03',
+        status: 'completed'
+      },
+      '004': {
+        student: 'Emily Clark',
+        title: 'Update student database records',
+        date: '2025-07-04',
+        status: 'overdue'
+      }
+    };
+
+    // Modal functionality
+    const modals = document.querySelectorAll('.modal');
+    const modalCloseButtons = document.querySelectorAll('.modal-close');
+    const cancelButtons = document.querySelectorAll('.cancel-btn');
+    
+    // Open modals based on button clicks
+    document.querySelectorAll('.action-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        const workId = this.getAttribute('data-id');
+        const workItem = workItems[workId];
+        
+        if (this.classList.contains('view-details')) {
+          // Show details modal
+          document.getElementById('modal-id').textContent = workId;
+          document.getElementById('modal-student').textContent = workItem.student;
+          document.getElementById('modal-title').textContent = workItem.title;
+          document.getElementById('modal-date').textContent = workItem.date;
+          document.getElementById('modal-status').textContent = workItem.status.replace('-', ' ');
+          document.getElementById('detailsModal').style.display = 'block';
+        } 
+        else if (this.classList.contains('complete') || this.classList.contains('in-progress')) {
+          // Show status update modal
+          document.getElementById('status-work-id').textContent = workId;
+          document.getElementById('status-select').value = 
+            this.classList.contains('complete') ? 'completed' : 'in-progress';
+          document.getElementById('statusModal').style.display = 'block';
+        }
+      });
+    });
+
+    // Close modals
+    function closeAllModals() {
+      modals.forEach(modal => {
+        modal.style.display = 'none';
+      });
+    }
+
+    modalCloseButtons.forEach(button => {
+      button.addEventListener('click', closeAllModals);
+    });
+
+    cancelButtons.forEach(button => {
+      button.addEventListener('click', closeAllModals);
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener('click', (event) => {
+      modals.forEach(modal => {
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+    });
+
+    // Update status functionality
+    document.querySelector('.update-status-btn').addEventListener('click', function() {
+      const workId = document.getElementById('status-work-id').textContent;
+      const newStatus = document.getElementById('status-select').value;
+      
+      // Update the status in our sample data
+      workItems[workId].status = newStatus;
+      
+      // In a real app, you would send this to your backend
+      alert(`Status updated for Work ID: ${workId}\nNew Status: ${newStatus.replace('-', ' ')}`);
+      
+      // Close modal and refresh the display
+      closeAllModals();
+      location.reload(); // Simple refresh for demonstration
+    });
+
+    // Update status from details modal
+    document.querySelector('.update-status').addEventListener('click', function() {
+      const workId = document.getElementById('modal-id').textContent;
+      document.getElementById('status-work-id').textContent = workId;
+      document.getElementById('status-select').value = workItems[workId].status;
+      document.getElementById('detailsModal').style.display = 'none';
+      document.getElementById('statusModal').style.display = 'block';
+    });
+
+    // Filter functionality (simplified)
+    function applyFilter() {
+      const category = document.getElementById('filterCategory').value;
+      const fromDate = document.getElementById('fromDate').value;
+      const toDate = document.getElementById('toDate').value;
+      
+      // In a real app, you would filter the data and re-render the table
+      alert(`Filters applied:\nCategory: ${category || 'All'}\nFrom: ${fromDate || 'Any'}\nTo: ${toDate || 'Any'}`);
+    }
+  </script>
+</body>
+</html>

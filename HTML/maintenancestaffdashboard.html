@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Maintenance Staff Dashboard</title>
+  <link rel="stylesheet" href="maintenancestaffdashboard.css" />
+</head>
+<body>
+  <header>
+    <h1>Maintenance Staff Dashboard</h1>
+    <button onclick="location.href='index.html'" class="logout-btn" onclick="handleLogout()">Logout</button>
+  </header>
+
+  <div id="warningBanner" class="warning-banner" style="display: none;">
+    ⚠️ You have received a warning from Admin. <a href="viewadminwarnings.html" style="color: #856404; text-decoration: underline;">View Details</a>
+  </div>
+
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <button class="menu-btn" onclick="location.href='maintenancestaffassignedwork.html'">View And update Assigned Work</button>
+      <button class="menu-btn" onclick="location.href='maintenancestafftaskhistory.html'">Task History</button>
+      <button class="menu-btn" onclick="location.href='maintenancestaffadminwarnings.html'">View Admin Warnings</button>
+    </aside>
+
+    <main class="content-area">
+      <div class="content-header">
+        <h2>Welcome to Your Dashboard</h2>
+        <p>Manage your assigned maintenance tasks efficiently and stay updated with admin notifications.</p>
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    &copy; 2025 Maintenance System. All rights reserved.
+  </footer>
+
+  <script src="maintenancestaffdashboard.js"></script>
+</body>
+</html>

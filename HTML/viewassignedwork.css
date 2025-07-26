@@ -1,0 +1,86 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f7f9;
+}
+
+header {
+  background-color: #003366;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+}
+
+.logout-btn {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  background-color: #ff4d4d;
+  color: white;
+  padding: 8px 12px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+aside {
+  width: 220px;
+  background-color: #002244;
+  color: white;
+  height: calc(100vh - 100px);
+  float: left;
+  padding-top: 30px;
+  position: fixed;
+}
+
+aside ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+aside ul li {
+  padding: 15px 20px;
+}
+
+aside ul li a {
+  color: white;
+  text-decoration: none;
+  display: block;
+}
+
+aside ul li a.active,
+aside ul li a:hover {
+  background-color: #004080;
+  border-radius: 5px;
+}
+
+main {
+  margin-left: 240px;
+  padding: 30px;
+  min-height: calc(100vh - 120px);
+}
+
+.content table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+.content th,
+.content td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+footer {
+  background-color: #003366;
+  color: white;
+  text-align: center;
+  padding: 15px;
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+}

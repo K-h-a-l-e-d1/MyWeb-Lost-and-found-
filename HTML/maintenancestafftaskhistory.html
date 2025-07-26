@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Task History - Maintenance Staff</title>
+  <link rel="stylesheet" href="maintenancestafftaskhistory.css" />
+</head>
+<body>
+  <header>
+    <h1>Task History</h1>
+    <nav>
+      <a href="maintenancestaffdashboard.html">⬅️ Back to Dashboard</a>
+      <a href="maintenancestaffassignedwork.html" class="work-link">📋 Current Tasks</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="filters">
+      <label for="dateFilter">Filter by Date Range:</label>
+      <input type="date" id="fromDate" />
+      <span>to</span>
+      <input type="date" id="toDate" />
+      
+      <label for="statusFilter">Status:</label>
+      <select id="statusFilter">
+        <option value="all">All Statuses</option>
+        <option value="completed">Completed</option>
+        <option value="overdue">Overdue</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+      
+      <button onclick="applyFilters()">Apply Filters</button>
+      <button class="reset-btn" onclick="resetFilters()">Reset</button>
+    </section>
+
+    <section class="task-history-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Task ID</th>
+            <th>Student</th>
+            <th>Title</th>
+            <th>Assigned Date</th>
+            <th>Completion Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="taskHistoryTableBody">
+          <!-- Task history data will be populated here -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; <span id="year"></span> Digital Complaint & Maintenance System</p>
+  </footer>
+
+  <!-- Task Details Modal -->
+  <div id="taskDetailsModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close">&times;</span>
+      <div class="modal-header">Task Details</div>
+      <div class="modal-body">
+        <div class="modal-field"><strong>Task ID:</strong> <span id="modal-task-id"></span></div>
+        <div class="modal-field"><strong>Student:</strong> <span id="modal-student-name"></span></div>
+        <div class="modal-field"><strong>Title:</strong> <span id="modal-title"></span></div>
+        <div class="modal-field"><strong>Description:</strong> <div class="task-description" id="modal-description"></div></div>
+        <div class="modal-field"><strong>Assigned Date:</strong> <span id="modal-assigned-date"></span></div>
+        <div class="modal-field"><strong>Completion Date:</strong> <span id="modal-completion-date"></span></div>
+        <div class="modal-field"><strong>Status:</strong> <span id="modal-status"></span></div>
+        <div class="modal-field"><strong>Your Notes:</strong> <div class="task-notes" id="modal-notes"></div></div>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn close-btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Enhanced Task History Data
+    const taskHistory = [
+      { 
+        id: 'TASK-001',
+        student: 'John Doe',
+        title: 'Fix broken air conditioning',
+        description: 'AC unit in Room 205 not cooling properly. Needs inspection and repair.',
+        assignedDate: '2025-07-01',
+        completionDate: '2025-07-03',
+        status: 'completed',
+        notes: 'Replaced faulty capacitor and cleaned filters. System now functioning normally.'
+      },
+      { 
+        id: 'TASK-002',
+        student: 'Jane Smith',
+        title: 'Network connectivity issues',
+        description: 'Lab 3 computers cannot connect to the network. Intermittent connectivity issues reported.',
+        assignedDate: '2025-07-02',
+        completionDate: '2025-07-04',
+        status: 'completed',
+        notes: 'Replaced defective switch port. Tested all connections - working properly now.'
+      },
+      { 
+        id: 'TASK-003',
+        student: 'Michael Brown',
+        title: 'Leaky faucet repair',
+        description: 'Constant dripping from faucet in Mens restroom, 2nd floor.',
+        assignedDate: '2025-07-05',
+        completionDate: '2025-07-07',
+        status: 'completed',
+        notes: 'Replaced washer and cartridge. No more leaks detected.'
+      },
+      { 
+        id: 'TASK-004',
+        student: 'Emily Clark',
+        title: 'Broken window',
+        description: 'Window in Classroom 304 has a large crack and needs replacement.',
+        assignedDate: '2025-07-08',
+        completionDate: '',
+        status: 'overdue',
+        notes: 'Waiting for replacement glass to arrive from supplier.'
+      }
+    ];
+
+    function populateTaskHistory(filteredTasks = null) {
+      const tableBody = document.getElementById('taskHistoryTableBody');
+      tableBody.innerHTML = '';
+      
+      const tasksToDisplay = filteredTasks || taskHistory;
+      
+      tasksToDisplay.forEach(task => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${task.id}</td>
+          <td>${task.student}</td>
+          <td>${task.title}</td>
+          <td>${task.assignedDate}</td>
+          <td>${task.completionDate || '-'}</td>
+          <td><span class="status ${task.status}">${task.status.charAt(0).toUpperCase() + task.status.slice(1)}</span></td>
+          <td><button class="action-btn view-details" data-id="${task.id}">View Details</button></td>
+        `;
+        tableBody.appendChild(row);
+      });
+
+      // Attach event listeners to the new buttons
+      document.querySelectorAll('.view-details').forEach(button => {
+        button.addEventListener('click', showTaskDetails);
+      });
+    }
+
+    function showTaskDetails(event) {
+      const taskId = event.target.getAttribute('data-id');
+      const task = taskHistory.find(t => t.id === taskId);
+      
+      if (task) {
+        document.getElementById('modal-task-id').textContent = task.id;
+        document.getElementById('modal-student-name').textContent = task.student;
+        document.getElementById('modal-title').textContent = task.title;
+        document.getElementById('modal-description').textContent = task.description;
+        document.getElementById('modal-assigned-date').textContent = task.assignedDate;
+        document.getElementById('modal-completion-date').textContent = task.completionDate || 'Not completed';
+        document.getElementById('modal-status').textContent = task.status.charAt(0).toUpperCase() + task.status.slice(1);
+        document.getElementById('modal-notes').textContent = task.notes || 'No notes available';
+        
+        document.getElementById('taskDetailsModal').style.display = 'block';
+      }
+    }
+
+    function applyFilters() {
+      const fromDate = document.getElementById('fromDate').value;
+      const toDate = document.getElementById('toDate').value;
+      const statusFilter = document.getElementById('statusFilter').value;
+      
+      let filteredTasks = taskHistory;
+      
+      // Apply date filter
+      if (fromDate) {
+        filteredTasks = filteredTasks.filter(task => task.assignedDate >= fromDate);
+      }
+      
+      if (toDate) {
+        filteredTasks = filteredTasks.filter(task => task.assignedDate <= toDate);
+      }
+      
+      // Apply status filter
+      if (statusFilter !== 'all') {
+        filteredTasks = filteredTasks.filter(task => task.status === statusFilter);
+      }
+      
+      populateTaskHistory(filteredTasks);
+    }
+
+    function resetFilters() {
+      document.getElementById('fromDate').value = '';
+      document.getElementById('toDate').value = '';
+      document.getElementById('statusFilter').value = 'all';
+      populateTaskHistory();
+    }
+
+    function closeModal() {
+      document.getElementById('taskDetailsModal').style.display = 'none';
+    }
+
+    // Event listeners
+    document.querySelector('.modal-close').addEventListener('click', closeModal);
+    document.querySelector('.close-btn').addEventListener('click', closeModal);
+    window.addEventListener('click', (event) => {
+      if (event.target === document.getElementById('taskDetailsModal')) {
+        closeModal();
+      }
+    });
+
+    // Initialize the page
+    window.onload = function() {
+      populateTaskHistory();
+      
+      // Set default date range to last 30 days
+      const today = new Date();
+      const lastMonth = new Date();
+      lastMonth.setDate(lastMonth.getDate() - 30);
+      
+      document.getElementById('toDate').valueAsDate = today;
+      document.getElementById('fromDate').valueAsDate = lastMonth;
+      
+      // Apply default filter
+      applyFilters();
+    };
+  </script>
+</body>
+</html>

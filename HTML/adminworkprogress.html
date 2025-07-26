@@ -9,19 +9,21 @@
 <body>
   <header>
     <h1>Work Progress</h1>
-    <nav><a href="admindashboard.html">⬅️ Back to Dashboard</a></nav>
+    <nav>
+      <a href="admindashboard.html">⬅️ Back to Dashboard</a>
+    </nav>
   </header>
 
   <main>
-    <!-- Overdue Tasks Notification -->
+    <!-- Overdue Tasks Notification with View Button -->
     <div id="overdueAlert" class="notification">
       <span>⚠️ 3 tasks overdue by 7+ days!</span>
-      <button onclick="showOverdueTasks()">View & Reply</button>
+      <button class="view-btn" onclick="viewOverdueTasks()">View Tasks</button>
     </div>
 
     <!-- Filters -->
     <div class="filters">
-      <select id="filterCategory">
+      <select id="filterCategory" onchange="filterTasks()">
         <option value="">All Categories</option>
         <option value="Facilities">Facilities</option>
         <option value="Technical Support">Technical Support</option>
@@ -41,47 +43,176 @@
     </div>
 
     <!-- Tasks Table -->
-    <table id="tasksTable">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Category</th>
-          <th>Description</th>
-          <th>Assigned To</th>
-          <th>Date</th>
-          <th>Status</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Filled by JavaScript -->
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table id="tasksTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Assigned To</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="tasksTableBody">
+          <!-- Dynamic rows will be inserted here -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Overdue Tasks Section -->
+    <div id="overdueTasksSection" class="overdue-tasks-section" style="display: none;">
+      <h3>Overdue Tasks</h3>
+      <button onclick="backToTasks()">Back to All Tasks</button>
+      <table id="overdueTasksTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Assigned To</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="overdueTasksBody">
+          <!-- Dynamic overdue tasks will be inserted here -->
+        </tbody>
+      </table>
+    </div>
   </main>
 
-  <footer>
-    <p>&copy; 2025 Digital Complaint & Maintenance System</p>
-  </footer>
-
-  <!-- Modals -->
-  <div id="overdueModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
-      <h3>Overdue Tasks</h3>
-      <ul id="overdueList"></ul>
-    </div>
-  </div>
-
+  <!-- Modal for Sending Warning -->
   <div id="warningModal" class="modal">
     <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
+      <span class="close" onclick="closeWarningModal()">&times;</span>
       <h3>Send Warning</h3>
-      <textarea id="warningText" placeholder="Your warning message..."></textarea>
-      <button onclick="sendWarning()">Send Warning</button>
-      <button onclick="closeModal()" class="cancel-btn">Cancel</button>
+      <div class="modal-body">
+        <label for="warningText">Enter your warning message:</label>
+        <textarea id="warningText" placeholder="Enter your warning message here..."></textarea>
+        <button onclick="sendWarning()">Send Warning</button>
+        <button onclick="closeWarningModal()" class="cancel-btn">Cancel</button>
+      </div>
     </div>
   </div>
 
-  <script src="adminworkprogress.js"></script>
+  <footer>
+    <p>&copy; <span id="year"></span> Maintenance System | All Rights Reserved</p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Task data (simulating database or dynamic content)
+    const tasks = [
+      {id: '001', category: 'Facilities', description: 'Fix broken air conditioning in Room 205', assignedTo: 'Abdullah Khan', date: '2025-07-15', status: 'Overdue'},
+      {id: '002', category: 'Technical Support', description: 'Network connectivity issues in Lab 3', assignedTo: 'Abdullah Khan', date: '2025-07-20', status: 'In Progress'},
+      {id: '003', category: 'Administrative', description: 'Update student database records', assignedTo: 'Abdullah Khan', date: '2025-07-22', status: 'Completed'},
+      {id: '004', category: 'Academic Issues', description: 'Resolve grading system error', assignedTo: 'Abdullah Khan', date: '2025-07-25', status: 'Pending'},
+    ];
+
+    // Function to filter tasks based on category and date
+    function filterTasks() {
+      const filterCategory = document.getElementById("filterCategory").value;
+      const fromDate = document.getElementById("fromDate").value;
+      const toDate = document.getElementById("toDate").value;
+
+      // Filter tasks based on category
+      const filteredTasks = tasks.filter(task => {
+        const taskDate = new Date(task.date);
+        const from = fromDate ? new Date(fromDate) : null;
+        const to = toDate ? new Date(toDate) : null;
+
+        // Check category and date range
+        const isCategoryMatch = filterCategory === '' || task.category === filterCategory;
+        const isWithinDateRange = (!from || taskDate >= from) && (!to || taskDate <= to);
+
+        return isCategoryMatch && isWithinDateRange;
+      });
+
+      // Clear the existing table
+      const tableBody = document.getElementById("tasksTableBody");
+      tableBody.innerHTML = '';
+
+      // Add filtered rows to the table
+      filteredTasks.forEach(task => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${task.id}</td>
+          <td>${task.category}</td>
+          <td>${task.description}</td>
+          <td>${task.assignedTo}</td>
+          <td>${task.date}</td>
+          <td><span class="status-${task.status.toLowerCase().replace(' ', '-')}" >${task.status}</span></td>
+          <td>
+            <button class="warning-btn" onclick="openWarningModal('${task.id}')">Send Warning</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Initial load (load all tasks by default)
+    filterTasks();
+
+    // Function to view only overdue tasks
+    function viewOverdueTasks() {
+      // Filter only overdue tasks
+      const overdueTasks = tasks.filter(task => task.status === 'Overdue');
+      
+      // Hide the main table and show the overdue tasks section
+      document.getElementById("tasksTable").style.display = "none";
+      document.getElementById("overdueTasksSection").style.display = "block";
+
+      // Clear the overdue tasks table
+      const overdueTasksBody = document.getElementById("overdueTasksBody");
+      overdueTasksBody.innerHTML = '';
+
+      // Add overdue tasks to the table
+      overdueTasks.forEach(task => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${task.id}</td>
+          <td>${task.category}</td>
+          <td>${task.description}</td>
+          <td>${task.assignedTo}</td>
+          <td>${task.date}</td>
+          <td><span class="status-${task.status.toLowerCase().replace(' ', '-')}" >${task.status}</span></td>
+        `;
+        overdueTasksBody.appendChild(row);
+      });
+    }
+
+    // Function to go back to the main tasks table
+    function backToTasks() {
+      document.getElementById("tasksTable").style.display = "table";
+      document.getElementById("overdueTasksSection").style.display = "none";
+    }
+
+    // Function to open the warning modal
+    function openWarningModal(taskId) {
+      // Store the task ID in a global variable or modal data
+      window.selectedTaskId = taskId;
+      document.getElementById("warningModal").style.display = "block";
+    }
+
+    // Function to close the warning modal
+    function closeWarningModal() {
+      document.getElementById("warningModal").style.display = "none";
+    }
+
+    // Function to send the warning
+    function sendWarning() {
+      const warningMessage = document.getElementById("warningText").value;s
+      if (warningMessage) {
+        alert(`Warning sent to task ID ${window.selectedTaskId}: ${warningMessage}`);
+        closeWarningModal();
+      } else {
+        alert("Please enter a warning message.");
+      }
+    }
+  </script>
 </body>
 </html>

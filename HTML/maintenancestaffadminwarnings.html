@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Warnings - Maintenance Staff</title>
+  <link rel="stylesheet" href="maintenancestaffadminwarnings.css" />
+</head>
+<body>
+  <header>
+    <h1>Admin Warnings</h1>
+    <nav>
+      <a href="maintenancestaffdashboard.html">⬅️ Back to Dashboard</a>
+      <a href="maintenancestaffassignedwork.html" class="work-link">📋 View Assigned Work</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="admin-warnings-container">
+      <div class="warning-filters">
+        <label for="warningStatusFilter">Filter by Status:</label>
+        <select id="warningStatusFilter">
+          <option value="all">All Warnings</option>
+          <option value="unread">Unread Only</option>
+          <option value="read">Read Only</option>
+        </select>
+        <button onclick="filterWarnings()">Apply Filter</button>
+      </div>
+
+      <div class="admin-warnings-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Warning ID</th>
+              <th>Date Issued</th>
+              <th>Severity</th>
+              <th>Title</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminWarningsTableBody">
+            <!-- Warnings data will be populated here dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; <span id="year"></span> Digital Complaint & Maintenance System</p>
+  </footer>
+
+  <!-- Warning Details Modal -->
+  <div id="warningDetailsModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close">&times;</span>
+      <div class="modal-header">Warning Details</div>
+      <div class="modal-body">
+        <div class="modal-field"><strong>Warning ID:</strong> <span id="warning-id"></span></div>
+        <div class="modal-field"><strong>Date Issued:</strong> <span id="warning-date"></span></div>
+        <div class="modal-field"><strong>Severity:</strong> <span id="warning-severity"></span></div>
+        <div class="modal-field"><strong>Title:</strong> <span id="warning-title"></span></div>
+        <div class="modal-field"><strong>Description:</strong> 
+          <div class="warning-description" id="warning-description"></div>
+        </div>
+        <div class="modal-field"><strong>Admin Notes:</strong> 
+          <div class="admin-notes" id="admin-notes"></div>
+        </div>
+        <div class="modal-field">
+          <label for="staff-response"><strong>Your Response:</strong></label>
+          <textarea id="staff-response" rows="4" placeholder="Enter your response to this warning..."></textarea>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn cancel-btn">Cancel</button>
+        <button class="modal-btn submit-response">Submit Response</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Enhanced Sample Data for Admin Warnings
+    const warnings = [
+      { 
+        id: 'WARN-001', 
+        dateIssued: '2025-07-05', 
+        severity: 'High',
+        title: 'Delayed Response Warning', 
+        description: 'You have not responded to assigned tasks within the expected 24-hour time frame for 3 consecutive tasks.', 
+        adminNotes: 'This is your first warning. Repeated delays may result in disciplinary action.',
+        status: 'unread',
+        staffResponse: ''
+      },
+      { 
+        id: 'WARN-002', 
+        dateIssued: '2025-07-08', 
+        severity: 'Medium',
+        title: 'Improper Task Handling', 
+        description: 'The last assigned task (ID: TASK-045) was not handled according to the standard operating procedures.', 
+        adminNotes: 'Please review the maintenance protocol document section 4.2 before your next assignment.',
+        status: 'read',
+        staffResponse: 'Acknowledged. I have reviewed the protocol and will follow it strictly.'
+      },
+      { 
+        id: 'WARN-003', 
+        dateIssued: '2025-07-10', 
+        severity: 'Low',
+        title: 'Equipment Misuse Reminder', 
+        description: 'Security cameras detected improper storage of maintenance equipment after your shift on 2025-07-09.', 
+        adminNotes: 'This is a friendly reminder to follow equipment storage guidelines.',
+        status: 'unread',
+        staffResponse: ''
+      }
+    ];
+
+    function populateWarnings(filter = 'all') {
+      const tableBody = document.getElementById('adminWarningsTableBody');
+      tableBody.innerHTML = ''; // Clear existing rows
+      
+      const filteredWarnings = filter === 'all' 
+        ? warnings 
+        : warnings.filter(w => w.status === filter);
+      
+      filteredWarnings.forEach(warning => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${warning.id}</td>
+          <td>${warning.dateIssued}</td>
+          <td><span class="severity ${warning.severity.toLowerCase()}">${warning.severity}</span></td>
+          <td>${warning.title}</td>
+          <td><span class="status ${warning.status}">${warning.status.charAt(0).toUpperCase() + warning.status.slice(1)}</span></td>
+          <td>
+            <button class="action-btn view-details" data-id="${warning.id}">View Details</button>
+            <button class="action-btn acknowledge-btn" data-id="${warning.id}">
+              ${warning.status === 'unread' ? 'Acknowledge' : 'Acknowledged'}
+            </button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+
+      // Attach event listeners
+      document.querySelectorAll('.view-details').forEach(btn => {
+        btn.addEventListener('click', showWarningDetails);
+      });
+      
+      document.querySelectorAll('.acknowledge-btn').forEach(btn => {
+        if (!btn.textContent.includes('Acknowledged')) {
+          btn.addEventListener('click', acknowledgeWarning);
+        }
+      });
+    }
+
+    function showWarningDetails(event) {
+      const warningId = event.target.getAttribute('data-id');
+      const warning = warnings.find(w => w.id === warningId);
+      
+      if (warning) {
+        document.getElementById('warning-id').textContent = warning.id;
+        document.getElementById('warning-date').textContent = warning.dateIssued;
+        document.getElementById('warning-severity').textContent = warning.severity;
+        document.getElementById('warning-title').textContent = warning.title;
+        document.getElementById('warning-description').textContent = warning.description;
+        document.getElementById('admin-notes').textContent = warning.adminNotes;
+        document.getElementById('staff-response').value = warning.staffResponse;
+        
+        document.getElementById('warningDetailsModal').style.display = 'block';
+      }
+    }
+
+    function acknowledgeWarning(event) {
+      const warningId = event.target.getAttribute('data-id');
+      const warning = warnings.find(w => w.id === warningId);
+      
+      if (warning) {
+        warning.status = 'read';
+        event.target.textContent = 'Acknowledged';
+        event.target.classList.add('acknowledged');
+        event.target.disabled = true;
+        
+        // Update status in table
+        const statusElement = event.target.closest('tr').querySelector('.status');
+        statusElement.textContent = 'Read';
+        statusElement.classList.remove('unread');
+        statusElement.classList.add('read');
+        
+        console.log(`Warning ${warningId} acknowledged`);
+      }
+    }
+
+    function filterWarnings() {
+      const filterValue = document.getElementById('warningStatusFilter').value;
+      populateWarnings(filterValue);
+    }
+
+    // Submit response to warning
+    document.querySelector('.submit-response').addEventListener('click', function() {
+      const warningId = document.getElementById('warning-id').textContent;
+      const response = document.getElementById('staff-response').value;
+      
+      const warning = warnings.find(w => w.id === warningId);
+      if (warning) {
+        warning.staffResponse = response;
+        alert('Your response has been submitted successfully.');
+        document.getElementById('warningDetailsModal').style.display = 'none';
+      }
+    });
+
+    // Modal close functionality
+    document.querySelectorAll('.modal-close, .cancel-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById('warningDetailsModal').style.display = 'none';
+      });
+    });
+
+    // Initialize the page
+    window.onload = function() {
+      populateWarnings();
+    };
+  </script>
+</body>
+</html>

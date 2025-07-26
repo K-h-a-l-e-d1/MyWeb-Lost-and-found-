@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Complaints - Student Panel</title>
+  <link rel="stylesheet" href="studentmycomplaints.css">
+</head>
+<body>
+  <header>
+    <h1>My Complaints</h1>
+  </header>
+
+  <main class="complaint-list">
+    <table>
+      <thead>
+        <tr>
+          <th>Complaint ID</th>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>001</td>
+          <td>Fan not working</td>
+          <td>In Progress</td>
+          <td><button onclick="window.location.href='studentviewprogress.html'">View Progress</button></td>
+        </tr>
+        <tr>
+          <td>002</td>
+          <td>Broken chair</td>
+          <td>Assigned</td>
+          <td><button onclick="window.location.href='studentviewprogress.html'">View Progress</button></td>
+        </tr>
+        <!-- More complaints can be added here -->
+      </tbody>
+    </table>
+
+    <div class="back-button">
+      <button onclick="window.location.href='studentdashboard.html'">Back to Dashboard</button>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; <span id="year"></span> Maintenance System</p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>

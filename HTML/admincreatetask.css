@@ -1,78 +1,457 @@
-body {
+/* Reset and Base Styles */
+* {
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f9f9f9;
-  color: #333;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f7fb;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  color: #333;
 }
 
+/* Header */
 header {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #475569 0%, #334155 100%);
   color: white;
-  padding: 20px;
-  text-align: center;
+  padding: 24px 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+  animation: slideInDown 0.6s ease-out;
+}
+
+header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: headerShine 3s ease-in-out infinite;
+}
+
+@keyframes headerShine {
+  0% { left: -100%; }
+  50% { left: 100%; }
+  100% { left: 100%; }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+header h1 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Logout Button */
+.logout-btn {
+  position: absolute;
+  right: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+  z-index: 2;
+}
+
+.logout-btn:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-50%) translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
 }
 
 header nav {
-  margin-top: 10px;
+  position: relative;
+  z-index: 1;
 }
 
 header nav a {
-  color: #fff;
+  color: #e2e8f0;
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  padding: 8px 16px;
+  border-radius: 6px;
+  display: inline-block;
 }
 
+header nav a:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(-2px);
+}
+
+/* Main Content */
 main {
   flex: 1;
-  padding: 30px;
-  max-width: 500px;
-  margin: auto;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-form {
+  padding: 48px 32px;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  position: relative;
 }
 
-label {
-  margin-top: 15px;
-  font-weight: bold;
+main::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(34, 197, 94, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.03) 0%, transparent 50%);
+  pointer-events: none;
 }
 
-select, textarea, input {
-  padding: 10px;
-  margin-top: 5px;
+/* Form Container */
+form {
+  background: white;
+  padding: 48px;
+  width: 100%;
+  max-width: 700px;
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: formSlideIn 0.8s ease-out;
+}
+
+@keyframes formSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+form::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #22c55e, #3b82f6, #8b5cf6);
+  border-radius: 20px 20px 0 0;
+}
+
+/* Form Elements */
+form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #374151;
+  font-size: 1.1rem;
+  animation: fadeInLeft 0.6s ease-out;
+}
+
+form label:nth-of-type(1) { animation-delay: 0.1s; animation-fill-mode: both; }
+form label:nth-of-type(2) { animation-delay: 0.2s; animation-fill-mode: both; }
+form label:nth-of-type(3) { animation-delay: 0.3s; animation-fill-mode: both; }
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+form select,
+form textarea {
+  width: 100%;
+  padding: 16px 20px;
+  margin-bottom: 24px;
   font-size: 1rem;
-  border: 1.5px solid #ccc;
-  border-radius: 5px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  animation: fadeInUp 0.6s ease-out;
 }
 
-button {
-  margin-top: 25px;
-  padding: 12px;
-  background-color: #0056b3;
-  color: white;
-  font-weight: bold;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
+form select:nth-of-type(1) { animation-delay: 0.2s; animation-fill-mode: both; }
+form textarea { animation-delay: 0.3s; animation-fill-mode: both; }
+form select:nth-of-type(2) { animation-delay: 0.4s; animation-fill-mode: both; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+form select:focus,
+form textarea:focus {
+  outline: none;
+  border-color: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+  background-color: #fefffe;
+  transform: translateY(-1px);
+}
+
+form select {
   cursor: pointer;
-  transition: background 0.3s;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 16px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 48px;
 }
 
-button:hover {
-  background-color: #003f86;
+form textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.5;
 }
 
+/* Submit Button */
+form button[type="submit"] {
+  width: 100%;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: white;
+  border: none;
+  padding: 18px 32px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 24px rgba(34, 197, 94, 0.2);
+  position: relative;
+  overflow: hidden;
+  animation: buttonSlideIn 0.6s ease-out 0.5s both;
+}
+
+@keyframes buttonSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+form button[type="submit"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s;
+}
+
+form button[type="submit"]:hover::before {
+  left: 100%;
+}
+
+form button[type="submit"]:hover {
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(34, 197, 94, 0.3);
+}
+
+form button[type="submit"]:active {
+  transform: translateY(-1px);
+}
+
+/* Footer */
 footer {
+  background: linear-gradient(135deg, #475569 0%, #334155 100%);
+  color: white;
   text-align: center;
-  padding: 12px;
-  font-size: 0.85rem;
-  background-color: #f0f0f0;
+  padding: 20px;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid #e2e8f0;
+  animation: slideInUp 0.6s ease-out 0.3s both;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  main {
+    padding: 32px 24px;
+  }
+  
+  form {
+    padding: 36px;
+  }
+  
+  header h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    padding: 20px 24px;
+  }
+  
+  header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 12px;
+  }
+  
+  .logout-btn {
+    position: static;
+    transform: none;
+    margin-top: 12px;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+  
+  .logout-btn:hover {
+    transform: translateY(-2px);
+  }
+  
+  main {
+    padding: 24px 16px;
+  }
+  
+  form {
+    padding: 28px;
+    border-radius: 16px;
+  }
+  
+  form select,
+  form textarea {
+    padding: 14px 16px;
+    font-size: 0.95rem;
+  }
+  
+  form button[type="submit"] {
+    padding: 16px 28px;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 16px 20px;
+  }
+  
+  header h1 {
+    font-size: 1.5rem;
+  }
+  
+  header nav a {
+    font-size: 0.9rem;
+  }
+  
+  main {
+    padding: 20px 12px;
+  }
+  
+  form {
+    padding: 24px;
+  }
+  
+  form label {
+    font-size: 1rem;
+  }
+  
+  form select,
+  form textarea {
+    padding: 12px 14px;
+  }
+  
+  form button[type="submit"] {
+    padding: 14px 24px;
+    font-size: 1rem;
+  }
+}
+
+/* Professional Loading State */
+.loading form button[type="submit"] {
+  background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.loading form button[type="submit"]::after {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  margin-left: 8px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Focus Animations */
+form select:focus,
+form textarea:focus {
+  animation: focusPulse 0.3s ease-out;
+}
+
+@keyframes focusPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
 }

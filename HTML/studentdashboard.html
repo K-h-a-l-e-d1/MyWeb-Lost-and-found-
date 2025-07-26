@@ -3,35 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="admindashboard.css" />
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="studentdashboard.css" />
 </head>
 <body>
   <header>
-    <h1>Admin Dashboard</h1>
+    <h1>Student Dashboard</h1>
     <button onclick="location.href='index.html'" class="logout-btn" onclick="handleLogout()">Logout</button>
   </header>
   
 
-  <!-- 🔔 Top Warning Notification Bar -->
-  <div id="warningBanner" class="warning-banner" style="display: none;">
-    ⚠️ One or more staff members have overdue tasks or received a warning.
-  </div>
-
   <div class="dashboard-container">
     <!-- Sidebar -->
     <aside class="sidebar">
-      <button onclick="location.href='admincreatetask.html'" class="menu-btn">Create New Task</button>
-      <button onclick="location.href='adminunassignedcomplaints.html'" class="menu-btn">Unassigned Complaints</button>
-      <button onclick="location.href='adminassignedcomplaints.html'" class="menu-btn">Assigned Complaints</button>
-      <button onclick="location.href='adminworkprogress.html'" class="menu-btn">Work Progress</button>
+      <button onclick="location.href='studentfilecomplaint.html'" class="menu-btn">File a New Complaint</button>
+      <button onclick="location.href='studentmycomplaints.html'" class="menu-btn">My Complaints</button>
     </aside>
 
     <!-- Main Content -->
     <main class="content-area">
       <div class="content-header">
-        <h2>Welcome to the Admin Dashboard</h2>
-        <p>Manage tasks, complaints, and monitor work progress efficiently.</p>
+        <h2>Welcome to the Student Dashboard</h2>
       </div>
     </main>
   </div>

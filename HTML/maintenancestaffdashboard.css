@@ -17,14 +17,39 @@ body {
 header {
   background-color: #2C3E50;
   color: white;
-  padding: 20px;
-  text-align: center;
+  padding: 20px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 header h1 {
   font-size: 2rem;
   font-weight: 700;
+  text-align: center;
+  flex-grow: 1;
+}
+
+/* Logout Button */
+.logout-btn {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #e74c3c;
 }
 
 /* Warning Banner */
@@ -40,7 +65,7 @@ header h1 {
 /* Layout Container */
 .dashboard-container {
   display: flex;
-  min-height: 80vh;
+  flex-grow: 1;
 }
 
 /* Sidebar */
@@ -77,24 +102,7 @@ header h1 {
 .menu-btn:active {
   transform: translateY(1px);
 }
-.logout-btn {
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  background-color: #ff6b6b;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
 
-.logout-btn:hover {
-  background-color: #e74c3c;
-}
 /* Main Content */
 .content-area {
   flex-grow: 1;
@@ -121,7 +129,7 @@ footer {
   text-align: center;
   padding: 15px;
   font-size: 1rem;
-  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: auto;
 }
 
 /* Responsive */
