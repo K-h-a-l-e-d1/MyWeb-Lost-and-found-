@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - Digital Complaint System</title>
-  <link rel="stylesheet" href="login.css">
+  <link rel="stylesheet" href="../css/login.css">
 </head>
 <body>
   <div class="login-container">
@@ -90,25 +90,34 @@
         timestamp: new Date().getTime()
       }));
 
-      // Redirect to dashboard
+      // Redirect to dashboard - CORRECTED PATHS
       const dashboards = {
-        'admin': 'admindashboard.html',
-        'staff': 'staffdashboard.html',
-        'student': 'studentdashboard.html'
+        'admin': '../../admin/html/admindashboard.html',
+        'staff': '../../maintenancestaff/html/maintenancestaffdashboard.html',
+        'student': '../../student/html/studentdashboard.html'
       };
-      window.location.href = dashboards[userType];
+      
+      // Debug: Show the path being used
+      console.log('Redirecting to:', dashboards[userType]);
+      
+      if (dashboards[userType]) {
+        window.location.href = dashboards[userType];
+      } else {
+        alert('Dashboard not found for user type: ' + userType);
+      }
     });
 
-    // Auto-redirect if already logged in
+    // Auto-redirect if already logged in - SAME PATHS AS ABOVE
     document.addEventListener('DOMContentLoaded', function() {
-      const auth = JSON.parse(localStorage.getItem('auth'));
+      const auth = JSON.parse(localStorage.getItem('auth') || '{}');
       if (auth && auth.loggedIn) {
         const dashboards = {
-          'admin': 'admindashboard.html',
-          'staff': 'staffdashboard.html',
-          'student': 'studentdashboard.html'
+          'admin': '../../admin/html/admindashboard.html',
+          'staff': '../../maintenancestaff/html/maintenancestaffdashboard.html',
+          'student': '../../student/html/studentdashboard.html'
         };
         if (dashboards[auth.type]) {
+          console.log('Auto-redirecting to:', dashboards[auth.type]);
           window.location.href = dashboards[auth.type];
         }
       }

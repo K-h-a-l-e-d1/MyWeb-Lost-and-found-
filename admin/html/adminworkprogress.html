@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Unassigned Complaints - Admin</title>
+  <link rel="stylesheet" href="../css/adminunassignedcomplaints.css" />
+</head>
+<body>
+  <header>
+    <h1>Unassigned Complaints</h1>
+    <button onclick="location.href='index.html'" class="logout-btn">Logout</button>
+    <nav><a href="admindashboard.html">⬅️ Back to Dashboard</a></nav>
+  </header>
+
+  <main>
+    <!-- Category Filter Dropdown -->
+    <div class="filter-section">
+      <label for="categoryFilter">Select Category:</label>
+      <select id="categoryFilter" onchange="filterByCategory()">
+        <option value="">-- All Categories --</option>
+        <option value="Facilities">Facilities</option>
+        <option value="Technical Support">Technical Support</option>
+        <option value="Academic Issues">Academic Issues</option>
+        <option value="Administrative">Administrative</option>
+        <option value="Harassment/Bullying">Harassment/Bullying</option>
+        <option value="Lost">Other</option>
+      </select>
+    </div>
+
+    <!-- Complaints Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>Select</th>
+          <th>ID</th>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Date Submitted</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="adminunassignedComplaintsBody">
+        <!-- Rows inserted dynamically by JS -->
+      </tbody>
+    </table>
+
+    <!-- Assignment Section -->
+    <div class="assign-section">
+      <label for="staffSelect">Assign to:</label>
+      <select id="staffSelect">
+        <option value="">-- Select Staff --</option>
+        <option value="Abdullah Khan">Abdullah Khan</option>
+      </select>
+      <button onclick="assignComplaints()">Assign Selected</button>
+    </div>
+
+    <!-- Rejection Button -->
+    <div class="action-buttons">
+      <button onclick="openRejectModal()" class="reject-btn">Reject Selected</button>
+    </div>
+  </main>
+
+  <!-- Complaint View Modal -->
+  <div id="viewModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('viewModal')">&times;</span>
+      <div class="modal-header">Complaint Details</div>
+      <div class="modal-body">
+        <div class="modal-field"><strong>ID:</strong> <span id="viewId"></span></div>
+        <div class="modal-field"><strong>Category:</strong> <span id="viewCategory"></span></div>
+        <div class="modal-field"><strong>Description:</strong> <span id="viewDescription"></span></div>
+        <div class="modal-field"><strong>Date Submitted:</strong> <span id="viewDate"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reject Confirmation Modal -->
+  <div id="rejectModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('rejectModal')">&times;</span>
+      <div class="modal-header">Confirm Rejection</div>
+      <div class="modal-body">
+        <p>Are you sure you want to reject the selected complaint(s)?</p>
+        <div class="modal-actions">
+          <button onclick="confirmReject()">Yes, Reject</button>
+          <button onclick="closeModal('rejectModal')">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; <span id="year"></span> Maintenance System</p>
+  </footer>
+
+  <script src="../js/adminworkprogress.js"></script>
+</body>
+</html>

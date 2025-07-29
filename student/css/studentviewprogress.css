@@ -1,0 +1,329 @@
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f7f9;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header */
+header {
+  background-color: #003366;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+}
+
+header h1 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+/* Logout Button */
+.logout-btn {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  background-color: #ff4d4d;
+  color: white;
+  padding: 8px 12px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+/* Sidebar */
+aside {
+  width: 220px;
+  background-color: #002244;
+  color: white;
+  height: calc(100vh - 100px);
+  float: left;
+  padding-top: 30px;
+  position: fixed;
+}
+
+aside ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+aside ul li {
+  padding: 15px 20px;
+}
+
+aside ul li a {
+  color: white;
+  text-decoration: none;
+  display: block;
+}
+
+aside ul li a.active,
+aside ul li a:hover {
+  background-color: #004080;
+  border-radius: 5px;
+}
+
+/* Main Content */
+main {
+  margin-left: 240px;
+  padding: 30px;
+  min-height: calc(100vh - 120px);
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+.content th,
+.content td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.content th {
+  background-color: #003366;
+  color: white;
+  font-weight: 600;
+  text-align: left;
+}
+
+.content td {
+  color: #374151;
+}
+
+tbody tr:hover {
+  background-color: #f8fafc;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Action Buttons */
+tbody button {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2);
+}
+
+tbody button:hover {
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  transform: translateY(-2px);
+}
+
+tbody button:active {
+  transform: translateY(0);
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  width: 60%;
+}
+
+.modal-close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal-close:hover,
+.modal-close:focus {
+  color: black;
+  text-decoration: none;
+}
+
+.modal-header {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.modal-body p {
+  font-size: 16px;
+  color: #555;
+}
+
+/* Footer */
+footer {
+  background-color: #003366;
+  color: white;
+  text-align: center;
+  padding: 15px;
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+}
+
+/* Back Button */
+.back-button {
+  margin-top: 32px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.back-button button {
+  background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(100, 116, 139, 0.2);
+}
+
+.back-button button:hover {
+  background: linear-gradient(135deg, #475569 0%, #334155 100%);
+  transform: translateY(-2px);
+}
+
+.back-button button:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .complaint-list {
+    padding: 24px 16px;
+  }
+
+  table {
+    font-size: 0.9rem;
+  }
+
+  thead th {
+    padding: 16px 12px;
+    font-size: 1rem;
+  }
+
+  tbody td {
+    padding: 14px 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 1.8rem;
+  }
+
+  .complaint-list {
+    padding: 20px 12px;
+  }
+
+  table {
+    overflow-x: auto;
+    display: block;
+    white-space: nowrap;
+  }
+
+  thead, tbody {
+    display: table;
+    width: 100%;
+  }
+
+  thead th {
+    padding: 12px 8px;
+    font-size: 0.9rem;
+  }
+
+  tbody td {
+    padding: 12px 8px;
+    font-size: 0.9rem;
+  }
+
+  tbody button {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  table {
+    border-radius: 12px;
+  }
+
+  thead th {
+    padding: 10px 6px;
+    font-size: 0.8rem;
+  }
+
+  tbody td {
+    padding: 10px 6px;
+    font-size: 0.8rem;
+  }
+
+  tbody button {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
+
+  .back-button button {
+    padding: 12px 24px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Animation for page load */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+table {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.back-button {
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+}

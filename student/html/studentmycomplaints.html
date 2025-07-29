@@ -21,35 +21,32 @@
           <th>Action</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td>001</td>
-          <td>Fan not working</td>
-          <td>In Progress</td>
-          <td><button onclick="window.location.href='studentviewprogress.html'">View Progress</button></td>
-        </tr>
-        <tr>
-          <td>002</td>
-          <td>Broken chair</td>
-          <td>Assigned</td>
-          <td><button onclick="window.location.href='studentviewprogress.html'">View Progress</button></td>
-        </tr>
-        <!-- More complaints can be added here -->
+      <tbody id="complaintList">
+        <!-- Dynamic rows will be inserted here by JS -->
       </tbody>
     </table>
 
+    <!-- Back Button -->
     <div class="back-button">
       <button onclick="window.location.href='studentdashboard.html'">Back to Dashboard</button>
     </div>
   </main>
 
+  <!-- Modal for Viewing Progress (Pop-up) -->
+  <div id="viewProgressModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal()">&times;</span>
+      <div class="modal-header">Complaint Progress</div>
+      <div class="modal-body" id="progressDetails">
+        <!-- Dynamic content will be added by JS -->
+      </div>
+    </div>
+  </div>
+
   <footer>
     <p>&copy; <span id="year"></span> Maintenance System</p>
   </footer>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
-
+  <script src="studentmycomplaints.js"></script>
 </body>
 </html>
