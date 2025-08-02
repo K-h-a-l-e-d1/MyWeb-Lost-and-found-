@@ -1,60 +1,102 @@
 document.addEventListener('DOMContentLoaded', function () {
   const complaintList = document.getElementById('complaintList');
-  const complaints = [
-    {id: 1, title: "Fan not working", status: "In Progress", category: "Electrical", description: "Fan in room 101 is not working", date: "2025-07-20", assignedTo: "John Doe", remarks: "Technician assigned."},
-    {id: 2, title: "Broken chair", status: "Assigned", category: "Furniture", description: "Chair in the study room is broken", date: "2025-07-21", assignedTo: "Jane Smith", remarks: "Awaiting parts."}
-  ];
 
-  if (complaints.length === 0) {
-    complaintList.innerHTML = '<tr><td colspan="4">No complaints submitted yet.</td></tr>';
-    return;
-  }
+  // Fetch complaints data from backend (PHP)
+  fetch('backend/get_complaints.php')  // Backend endpoint to get the complaints
+    .then(response => response.json())
+    .then(complaints => {
+      if (complaints.length === 0) {
+        complaintList.innerHTML = '<tr><td colspan="4" class="empty-state"><h3>No complaints submitted yet.</h3><p>Submit your first complaint to see it here.</p></td></tr>';
+        return;
+      }
 
-  complaints.forEach((c) => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${c.id}</td>
-      <td>${c.title}</td>
-      <td>${c.status}</td>
-      <td><button onclick="viewProgress(${c.id})">View Progress</button></td>
-    `;
-    complaintList.appendChild(row);
-  });
+      complaints.forEach(c => {
+        const row = document.createElement('tr');
+        
+        // Apply status class for styling
+        const statusClass = c.status.toLowerCase().replace(/\s+/g, '-');
+        
+        row.innerHTML = `
+          <td>${c.id}</td>
+          <td>${c.title}</td>
+          <td><span class="status ${statusClass}">${c.status}</span></td>
+          <td><button onclick="viewProgress(${c.id})">View Progress</button></td>
+        `;
+        complaintList.appendChild(row);
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching complaints:', error);
+    });
 });
 
-// Function to view progress in the modal
+// Function to view progress in the enhanced modal
 function viewProgress(id) {
-  const complaints = [
-    {id: 1, title: "Fan not working", status: "In Progress", category: "Electrical", description: "Fan in room 101 is not working", date: "2025-07-20", assignedTo: "John Doe", remarks: "Technician assigned."},
-    {id: 2, title: "Broken chair", status: "Assigned", category: "Furniture", description: "Chair in the study room is broken", date: "2025-07-21", assignedTo: "Jane Smith", remarks: "Awaiting parts."}
-  ];
+  // Fetch complaint details from the backend
+  fetch(`backend/get_complaint_details.php?id=${id}`)  // Get specific complaint details
+    .then(response => response.json())
+    .then(complaint => {
+      if (!complaint) {
+        document.getElementById("progressDetails").innerHTML = '<p>Complaint not found.</p>';
+        return;
+      }
 
-  const complaint = complaints.find(c => c.id === id);
+      // Apply status class for consistent styling
+      const statusClass = complaint.status.toLowerCase().replace(/\s+/g, '-');
 
-  // Get the progress details section
-  const progressSection = document.getElementById("progressDetails");
+      // Set data in the modal with enhanced structure
+      const progressSection = document.getElementById("progressDetails");
+      progressSection.innerHTML = `
+        <div class="progress-header">Progress Report</div>
+        <div class="modal-field"><strong>Complaint ID:</strong> ${complaint.id}</div>
+        <div class="modal-field"><strong>Title:</strong> ${complaint.title}</div>
+        <div class="modal-field"><strong>Category:</strong> ${complaint.category}</div>
+        <div class="modal-field"><strong>Description:</strong> ${complaint.description}</div>
+        <div class="modal-field"><strong>Date Submitted:</strong> ${complaint.date}</div>
+        <div class="modal-field"><strong>Status:</strong> <span class="status ${statusClass}">${complaint.status}</span></div>
+        <div class="modal-field"><strong>Assigned Staff:</strong> ${complaint.assignedTo || 'Not Assigned'}</div>
+        <div class="modal-field"><strong>Remarks:</strong> ${complaint.remarks || 'No updates yet.'}</div>
+      `;
 
-  if (!complaint) {
-    progressSection.innerHTML = '<p>Complaint not found.</p>';
-    return;
-  }
-
-  // Set data in the modal
-  progressSection.innerHTML = `
-    <h2>Progress Report</h2>
-    <p><strong>Category:</strong> ${complaint.category}</p>
-    <p><strong>Description:</strong> ${complaint.description}</p>
-    <p><strong>Date Submitted:</strong> ${complaint.date}</p>
-    <p><strong>Status:</strong> ${complaint.status}</p>
-    <p><strong>Assigned Staff:</strong> ${complaint.assignedTo || 'Not Assigned'}</p>
-    <p><strong>Remarks:</strong> ${complaint.remarks || 'No updates yet.'}</p>
-  `;
-
-  // Show the modal (popup)
-  document.getElementById("viewProgressModal").style.display = "block";
+      // Show the modal (popup)
+      document.getElementById("viewProgressModal").style.display = "block";
+    })
+    .catch(error => {
+      console.error('Error fetching complaint details:', error);
+    });
 }
 
 // Function to close the modal
 function closeModal() {
   document.getElementById("viewProgressModal").style.display = "none";
 }
+
+// Close modal on clicking outside the modal content or pressing Escape key
+function setupModal() {
+  const modal = document.getElementById("viewProgressModal");
+  const closeBtn = document.querySelector(".modal-close");
+
+  // Close on clicking the X button
+  closeBtn.onclick = () => {
+    modal.style.display = "none";
+  };
+
+  // Close on clicking outside the modal content
+  window.onclick = (event) => {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  };
+
+  // Close on pressing Escape key
+  window.onkeydown = (event) => {
+    if (event.key === "Escape" && modal.style.display === "block") {
+      modal.style.display = "none";
+    }
+  };
+}
+
+// Initialize modal functionality on page load
+window.onload = () => {
+  setupModal();
+};

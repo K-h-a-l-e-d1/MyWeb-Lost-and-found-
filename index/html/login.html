@@ -3,125 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Digital Complaint System</title>
+  <title>Login - Digital Complaint & Maintenance System</title>
   <link rel="stylesheet" href="../css/login.css">
 </head>
 <body>
-  <div class="login-container">
-    <h2>Login</h2>
-    <form id="loginForm">
-      <div class="input-group">
-        <input type="email" id="email" placeholder="Email" required>
+  <div class="login-wrapper">
+    <div class="login-container">
+      <div class="login-header">
+        <div class="logo-container">
+          <div class="logo-icon">🔧</div>
+        </div>
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Sign in to your account</p>
       </div>
-      <div class="input-group">
-        <input type="password" id="password" placeholder="Password" required>
+
+      <form id="loginForm" class="login-form">
+        <div class="input-group">
+          <div class="input-container">
+            <span class="input-icon">📧</span>
+            <input type="email" id="email" placeholder="Enter your email" required>
+            <div class="input-underline"></div>
+          </div>
+          <div class="error-message" id="emailError"></div>
+        </div>
+
+        <div class="input-group">
+          <div class="input-container">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="password" placeholder="Enter your password" required>
+            <button type="button" class="password-toggle" id="passwordToggle">👁️</button>
+            <div class="input-underline"></div>
+          </div>
+          <div class="error-message" id="passwordError"></div>
+        </div>
+
+        <div class="input-group">
+          <div class="select-container">
+            <span class="input-icon">👤</span>
+            <select id="userType" required>
+              <option value="">Select User Type</option>
+              <option value="student">Student</option>
+              <option value="staff">Maintenance Staff</option>
+              <option value="admin">Admin</option>
+            </select>
+            <div class="select-arrow">▼</div>
+            <div class="input-underline"></div>
+          </div>
+          <div class="error-message" id="userTypeError"></div>
+        </div>
+
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox" id="rememberMe">
+            <span class="checkmark"></span>
+            Remember me
+          </label>
+          <a href="forgotpass.html" class="forgot-link">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="login-btn">
+          <span class="btn-text">Sign In</span>
+          <div class="btn-loader"></div>
+        </button>
+
+        <div class="divider">
+          <span>or</span>
+        </div>
+
+        <div class="auth-links">
+          <p>Don't have an account? <a href="register.html" class="register-link">Create account</a></p>
+        </div>
+      </form>
+
+      <div class="footer-note">
+        <p>&copy; <span id="year"></span> Digital Complaint & Maintenance System</p>
       </div>
-      <div class="input-group">
-        <select id="userType" required>
-          <option value="">Select User Type</option>
-          <option value="student">Student</option>
-          <option value="staff">Maintenance Staff</option>
-          <option value="admin">Admin</option>
-        </select>
-      </div>
-      <button type="submit">Login</button>
-      <div class="links">
-        <a href="register.html">Create account</a>
-        <a href="forgot-password.html">Forgot password?</a>
-      </div>
-    </form>
-    <p class="footer-note">© 2025 Digital Complaint & Maintenance System</p>
+    </div>
   </div>
 
+  <script src="../js/login.js"></script>
   <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const email = document.getElementById('email').value.trim().toLowerCase();
-      const password = document.getElementById('password').value;
-      const userType = document.getElementById('userType').value;
-
-      // Demo users database
-      const users = {
-        'admin@example.com': { 
-          password: 'admin123', 
-          type: 'admin',
-          name: 'Admin User'
-        },
-        'staff@example.com': { 
-          password: 'staff123', 
-          type: 'staff',
-          name: 'Maintenance Staff'
-        },
-        'student@example.com': { 
-          password: 'student123', 
-          type: 'student',
-          name: 'Student User'
-        }
-      };
-
-      // Validation
-      if (!email || !password || !userType) {
-        alert('Please fill in all fields');
-        return;
-      }
-
-      if (!users[email]) {
-        alert('Email not found');
-        return;
-      }
-
-      if (users[email].password !== password) {
-        alert('Incorrect password');
-        return;
-      }
-
-      if (users[email].type !== userType) {
-        alert(`This email is registered as ${users[email].type}`);
-        return;
-      }
-
-      // Create session
-      localStorage.setItem('auth', JSON.stringify({
-        email: email,
-        type: userType,
-        name: users[email].name,
-        loggedIn: true,
-        timestamp: new Date().getTime()
-      }));
-
-      // Redirect to dashboard - CORRECTED PATHS
-      const dashboards = {
-        'admin': '../../admin/html/admindashboard.html',
-        'staff': '../../maintenancestaff/html/maintenancestaffdashboard.html',
-        'student': '../../student/html/studentdashboard.html'
-      };
-      
-      // Debug: Show the path being used
-      console.log('Redirecting to:', dashboards[userType]);
-      
-      if (dashboards[userType]) {
-        window.location.href = dashboards[userType];
-      } else {
-        alert('Dashboard not found for user type: ' + userType);
-      }
-    });
-
-    // Auto-redirect if already logged in - SAME PATHS AS ABOVE
-    document.addEventListener('DOMContentLoaded', function() {
-      const auth = JSON.parse(localStorage.getItem('auth') || '{}');
-      if (auth && auth.loggedIn) {
-        const dashboards = {
-          'admin': '../../admin/html/admindashboard.html',
-          'staff': '../../maintenancestaff/html/maintenancestaffdashboard.html',
-          'student': '../../student/html/studentdashboard.html'
-        };
-        if (dashboards[auth.type]) {
-          console.log('Auto-redirecting to:', dashboards[auth.type]);
-          window.location.href = dashboards[auth.type];
-        }
-      }
-    });
+    document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 </body>
 </html>

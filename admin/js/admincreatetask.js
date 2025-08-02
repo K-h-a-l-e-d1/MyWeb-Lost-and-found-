@@ -13,14 +13,33 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    // Simulate storing task (you can later replace this with PHP/MySQL)
-    console.log("✅ Task Created:");
-    console.log("Category:", category);
-    console.log("Description:", description);
-    console.log("Assigned to:", staff);
+    // Prepare data to be sent to the backend
+    const taskData = {
+      category: category,
+      description: description,
+      staff: staff,
+    };
 
-    alert(`✅ Task successfully assigned to ${staff}`);
-
-    form.reset(); // Reset the form after submission
+    // Send the data to PHP backend using fetch API
+    fetch('backend/create_task.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(taskData), // Send data as JSON
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert(`✅ Task successfully assigned to ${staff}`);
+        form.reset(); // Reset the form after submission
+      } else {
+        alert("❌ Error creating task. Please try again.");
+      }
+    })
+    .catch(error => {
+      console.error("Error creating task:", error);
+      alert("❌ Something went wrong. Please try again later.");
+    });
   });
 });

@@ -1,30 +1,11 @@
-// Dummy assigned complaints data
-let assignedComplaints = [
-  {
-    id: 1,
-    category: "Facilities",
-    description: "Fan is not working in Room 204.",
-    staff: "Abdullah Khan",
-    assignDate: "2025-07-01",
-    status: "Assigned"
-  },
-  {
-    id: 2,
-    category: "Technical Support",
-    description: "WiFi not working in Lab 3.",
-    staff: "Abdullah Khan",
-    assignDate: "2025-07-03",
-    status: "In Progress"
-  },
-  {
-    id: 3,
-    category: "Administrative",
-    description: "ID card printing delayed.",
-    staff: "Abdullah Khan",
-    assignDate: "2025-07-02",
-    status: "Completed"
-  }
-];
+// Remove dummy assigned complaints data and fetch data from PHP in real-world application
+function fetchAssignedComplaints() {
+  // Example of how you might fetch data from a PHP backend (replace with actual API endpoint)
+  fetch('backend/get_complaints.php')
+    .then(response => response.json())
+    .then(data => renderComplaints(data))
+    .catch(error => console.error('Error fetching complaints:', error));
+}
 
 // Render complaints in the table
 function renderComplaints(data) {
@@ -52,29 +33,25 @@ function applyFilter() {
   const fromDate = document.getElementById("fromDate").value;
   const toDate = document.getElementById("toDate").value;
 
-  const filtered = assignedComplaints.filter(c => {
-    const matchCategory = category === "" || c.category === category;
-    const matchFrom = !fromDate || c.assignDate >= fromDate;
-    const matchTo = !toDate || c.assignDate <= toDate;
-    return matchCategory && matchFrom && matchTo;
-  });
-
-  renderComplaints(filtered);
+  // Fetch and filter complaints based on user inputs
+  fetchAssignedComplaints({ category, fromDate, toDate });
 }
 
 // Show complaint details in popup modal
 function viewComplaint(id) {
-  const complaint = assignedComplaints.find(c => c.id === id);
-  if (!complaint) return;
-
-  document.getElementById("modalId").textContent = complaint.id;
-  document.getElementById("modalCategory").textContent = complaint.category;
-  document.getElementById("modalDescription").textContent = complaint.description;
-  document.getElementById("modalStaff").textContent = complaint.staff;
-  document.getElementById("modalAssignDate").textContent = complaint.assignDate;
-  document.getElementById("modalStatus").textContent = complaint.status;
-
-  document.getElementById("complaintModal").style.display = "block";
+  // Fetch complaint details from PHP backend (replace with actual API endpoint)
+  fetch(`backend/get_complaint_details.php?id=${id}`)
+    .then(response => response.json())
+    .then(complaint => {
+      document.getElementById("modalId").textContent = complaint.id;
+      document.getElementById("modalCategory").textContent = complaint.category;
+      document.getElementById("modalDescription").textContent = complaint.description;
+      document.getElementById("modalStaff").textContent = complaint.staff;
+      document.getElementById("modalAssignDate").textContent = complaint.assignDate;
+      document.getElementById("modalStatus").textContent = complaint.status;
+      document.getElementById("complaintModal").style.display = "block";
+    })
+    .catch(error => console.error('Error fetching complaint details:', error));
 }
 
 // Close modal on clicking the close button or outside the modal content
@@ -93,16 +70,8 @@ function setupModal() {
   };
 }
 
-function removeComplaint(id) {
-  if (confirm("Are you sure you want to reject this complaint?")) {
-    // remove from the list
-    unassignedComplaints = unassignedComplaints.filter(c => c.id !== id);
-    renderComplaints(unassignedComplaints);
-  }
-}
-
 // Initialize on page load
 window.onload = () => {
-  renderComplaints(assignedComplaints);
+  fetchAssignedComplaints();
   setupModal();
 };

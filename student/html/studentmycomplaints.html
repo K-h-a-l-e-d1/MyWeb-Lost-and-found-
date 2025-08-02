@@ -4,11 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Complaints - Student Panel</title>
-  <link rel="stylesheet" href="studentmycomplaints.css">
+  <link rel="stylesheet" href="../css/studentmycomplaints.css">
 </head>
 <body>
   <header>
     <h1>My Complaints</h1>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+    <nav><a href="studentdashboard.html">⬅️ Back to Dashboard</a></nav>
   </header>
 
   <main class="complaint-list">
@@ -32,7 +34,7 @@
     </div>
   </main>
 
-  <!-- Modal for Viewing Progress (Pop-up) -->
+  <!-- Enhanced Modal for Viewing Progress (Pop-up) -->
   <div id="viewProgressModal" class="modal">
     <div class="modal-content">
       <span class="modal-close" onclick="closeModal()">&times;</span>
@@ -44,9 +46,21 @@
   </div>
 
   <footer>
-    <p>&copy; <span id="year"></span> Maintenance System</p>
+    <p>&copy; <span id="year"></span> Digital Complaint & Maintenance System</p>
   </footer>
 
-  <script src="studentmycomplaints.js"></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+    
+    // Logout function
+    function logout() {
+      // Clear session data
+      localStorage.removeItem('auth');
+      
+      // Redirect to login page
+      window.location.href = '../../index/html/login.html';
+    }
+  </script>
+  <script src="../js/studentmycomplaints.js"></script>
 </body>
 </html>

@@ -9,6 +9,7 @@
 <body>
   <header>
     <h1>Assigned Complaints</h1>
+    <button class="logout-btn" onclick="logout()">Logout</button>
     <nav><a href="admindashboard.html">⬅️ Back to Dashboard</a></nav>
   </header>
 
@@ -58,7 +59,6 @@
     <p>&copy; <span id="year"></span> Digital Complaint & Maintenance System</p>
   </footer>
   
-
   <!-- Modal Popup -->
   <div id="complaintModal" class="modal">
     <div class="modal-content">
@@ -77,6 +77,15 @@
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Logout function
+    function logout() {
+      // Clear session data
+      localStorage.removeItem('auth');
+      
+      // Redirect to login page
+      window.location.href = '../../index/html/login.html';
+    }
   </script>
 
   <script src="../js/adminassignedcomplaints.js"></script>

@@ -18,21 +18,101 @@ body {
 header {
   background: linear-gradient(135deg, #475569 0%, #334155 100%);
   color: white;
-  padding: 20px;
-  text-align: center;
+  padding: 24px 32px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+  animation: slideInDown 0.6s ease-out;
+}
+
+header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: headerShine 3s ease-in-out infinite;
+}
+
+@keyframes headerShine {
+  0% { left: -100%; }
+  50% { left: 100%; }
+  100% { left: 100%; }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 header h1 {
   font-size: 2.2rem;
   font-weight: 600;
   letter-spacing: -0.5px;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Logout Button */
+.logout-btn {
+  position: absolute;
+  right: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+  z-index: 2;
+}
+
+.logout-btn:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-50%) translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+header nav {
+  position: relative;
+  z-index: 1;
+}
+
+header nav a {
+  color: #e2e8f0;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  padding: 8px 16px;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+header nav a:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(-2px);
 }
 
 /* Main Content */
 .complaint-list {
   flex: 1;
-  padding: 40px 20px;
+  padding: 32px;
   background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
   position: relative;
 }
@@ -45,8 +125,8 @@ header h1 {
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(circle at 20% 50%, rgba(34, 197, 94, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.03) 0%, transparent 50%);
+    radial-gradient(circle at 20% 30%, rgba(34, 197, 94, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.03) 0%, transparent 50%);
   pointer-events: none;
 }
 
@@ -62,6 +142,29 @@ table {
   position: relative;
   z-index: 1;
   border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: tableSlideIn 0.8s ease-out 0.2s both;
+}
+
+@keyframes tableSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+table::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #22c55e, #3b82f6, #8b5cf6);
+  border-radius: 16px 16px 0 0;
 }
 
 thead {
@@ -72,7 +175,7 @@ thead {
 thead th {
   padding: 20px 16px;
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1rem;
   text-align: left;
   letter-spacing: 0.5px;
 }
@@ -88,9 +191,14 @@ tbody tr:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
+tbody tr:last-child {
+  border-bottom: none;
+}
+
 tbody td {
-  padding: 18px 16px;
-  font-size: 1rem;
+  padding: 16px;
+  font-size: 0.95rem;
+  color: #374151;
 }
 
 tbody td:first-child {
@@ -98,17 +206,34 @@ tbody td:first-child {
   color: #1e293b;
 }
 
-/* Status Styling */
-tbody td:nth-child(3) {
+/* Status Badges */
+.status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-tbody tr:nth-child(1) td:nth-child(3) {
-  color: #f59e0b;
+.status.pending {
+  background-color: #fef3c7;
+  color: #d97706;
 }
 
-tbody tr:nth-child(2) td:nth-child(3) {
-  color: #3b82f6;
+.status.in-progress {
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+
+.status.assigned {
+  background-color: #e0e7ff;
+  color: #6366f1;
+}
+
+.status.completed {
+  background-color: #dcfce7;
+  color: #16a34a;
 }
 
 /* Action Buttons */
@@ -116,27 +241,135 @@ tbody button {
   background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   color: white;
   border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2);
 }
 
 tbody button:hover {
   background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
 }
 
-tbody button:active {
-  transform: translateY(0);
+/* Enhanced Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  background: white;
+  margin: 5% auto;
+  padding: 0;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: modalSlideIn 0.4s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-close {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #64748b;
+  transition: color 0.3s ease;
+  z-index: 10;
+}
+
+.modal-close:hover {
+  color: #ef4444;
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  color: white;
+  padding: 20px 24px;
+  border-radius: 16px 16px 0 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.modal-field {
+  margin-bottom: 16px;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.modal-field strong {
+  color: #374151;
+  display: inline-block;
+  min-width: 140px;
+}
+
+.progress-header {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e2e8f0;
 }
 
 /* Back Button */
 .back-button {
   margin-top: 32px;
   text-align: center;
+  position: relative;
+  z-index: 1;
+  animation: slideInUp 0.6s ease-out 0.8s both;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .back-button button {
@@ -149,57 +382,33 @@ tbody button:active {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(100, 116, 139, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.back-button button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.back-button button:hover::before {
+  left: 100%;
 }
 
 .back-button button:hover {
   background: linear-gradient(135deg, #475569 0%, #334155 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(100, 116, 139, 0.3);
 }
 
-/* Modal Styling */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
-}
-
-.modal-content {
-  background-color: #fff;
-  margin: 10% auto;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  width: 60%;
-}
-
-.modal-close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.modal-close:hover {
-  color: black;
-}
-
-.modal-header {
-  font-size: 20px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 20px;
-}
-
-.modal-body p {
-  font-size: 16px;
-  color: #555;
-}
-
+/* Footer */
 footer {
   background: linear-gradient(135deg, #475569 0%, #334155 100%);
   color: white;
@@ -207,4 +416,113 @@ footer {
   padding: 20px;
   font-size: 1rem;
   font-weight: 500;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid #e2e8f0;
+  animation: slideInUp 0.6s ease-out 0.8s both;
+}
+
+/* Empty state styling */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #7f8c8d;
+}
+
+.empty-state h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .complaint-list {
+    padding: 24px;
+  }
+  
+  table {
+    font-size: 0.9rem;
+  }
+  
+  thead th {
+    padding: 16px 12px;
+  }
+  
+  tbody td {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    padding: 20px 24px;
+  }
+  
+  header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 12px;
+  }
+  
+  .logout-btn {
+    position: static;
+    transform: none;
+    margin-top: 12px;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+  
+  .logout-btn:hover {
+    transform: translateY(-2px);
+  }
+  
+  .complaint-list {
+    padding: 20px 16px;
+  }
+  
+  table {
+    overflow-x: auto;
+    display: block;
+    white-space: nowrap;
+  }
+  
+  thead, tbody {
+    display: table;
+    width: 100%;
+  }
+  
+  .modal-content {
+    margin: 10% auto;
+    width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 1.5rem;
+  }
+  
+  table {
+    border-radius: 12px;
+  }
+  
+  thead th {
+    padding: 12px 8px;
+    font-size: 0.9rem;
+  }
+  
+  tbody td {
+    padding: 10px 8px;
+    font-size: 0.85rem;
+  }
+  
+  .modal-content {
+    margin: 15% auto;
+  }
+  
+  .modal-body {
+    padding: 20px;
+  }
 }
