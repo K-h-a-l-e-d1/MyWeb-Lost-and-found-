@@ -9,7 +9,8 @@
 <body>
   <header>
     <h1>Unassigned Complaints</h1>
-    <button onclick="location.href='../../index.html'" class="logout-btn">Logout</button>
+    <!-- This will now correctly call the logout function from the global scope -->
+    <button class="logout-btn" onclick="logout()">Logout</button>
     <nav><a href="admindashboard.html">⬅️ Back to Dashboard</a></nav>
   </header>
 
@@ -37,6 +38,7 @@
           <th>Category</th>
           <th>Description</th>
           <th>Date Submitted</th>
+          <th>Location</th> <!-- New Column for Location -->
           <th>Actions</th>
         </tr>
       </thead>
@@ -71,6 +73,7 @@
         <div class="modal-field"><strong>Category:</strong> <span id="viewCategory"></span></div>
         <div class="modal-field"><strong>Description:</strong> <span id="viewDescription"></span></div>
         <div class="modal-field"><strong>Date Submitted:</strong> <span id="viewDate"></span></div>
+        <div class="modal-field"><strong>Location:</strong> <span id="viewLocation"></span></div> <!-- Location in Modal -->
       </div>
     </div>
   </div>
@@ -97,6 +100,6 @@
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
-  <script src="../js/adminunassignedcomplaints.js"></script>
+  <script src="../js/adminunassignedcomplaints.js"></script> <!-- Link to JS file -->
 </body>
 </html>

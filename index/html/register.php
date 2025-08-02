@@ -1,17 +1,32 @@
 <?php
 header('Content-Type: application/json');
 
-// Include database
-require_once '../configdatabase.php';
+$host = 'localhost';
+$dbname = 'Mycomplaints_db';
+$username = 'root'; 
+$password = ''; 
 
-// Get form data
+function getConnection() {
+    global $host, $dbname, $username, $password;
+    
+    try {
+        $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $pdo;
+    } catch(PDOException $e) {
+        error_log("Database connection failed: " . $e->getMessage());
+        throw new Exception("Database connection failed: " . $e->getMessage());
+    }
+}
+
+
 $username = $_POST['username'] ?? '';
 $email = $_POST['email'] ?? '';
 $password = $_POST['password'] ?? '';
 $confirmPassword = $_POST['confirmPassword'] ?? '';
 $role = $_POST['role'] ?? '';
 
-// Simple validation
+
 if (empty($username) || empty($email) || empty($password) || empty($confirmPassword) || empty($role)) {
     echo json_encode(['success' => false, 'message' => 'All fields are required']);
     exit();
@@ -27,14 +42,14 @@ if (strlen($password) < 6) {
     exit();
 }
 
-// Convert role names to match database
+
 $userTypeMap = [
     'student' => 'student',
     'admin' => 'admin', 
     'maintenance' => 'staff'
 ];
 
-$userType = $userTypeMap[$role] ?? 'student';
+$userType = $userTypeMap[$role] ?? 'student'; 
 
 try {
     $pdo = getConnection();

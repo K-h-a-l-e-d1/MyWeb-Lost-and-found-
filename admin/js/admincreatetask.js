@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () { 
   const form = document.getElementById("createTaskForm");
 
   form.addEventListener("submit", function (e) {
@@ -42,4 +42,14 @@ document.addEventListener("DOMContentLoaded", function () {
       alert("❌ Something went wrong. Please try again later.");
     });
   });
+
+  // Logout function
+  window.logout = function() {
+    // Clear session or local storage (based on your app)
+    sessionStorage.clear(); // If you are using sessionStorage for session management
+    localStorage.clear();  // If you're using localStorage
+
+    // Redirect the user to the login page (adjust path as needed)
+    window.location.href = "../../index/html/index.html"; // Redirect to the login page
+  }
 });
