@@ -9,7 +9,7 @@
 <body>
   <header>
     <h1>Maintenance Staff Dashboard</h1>
-    <button onclick="location.href='index.html'" class="logout-btn" onclick="handleLogout()">Logout</button>
+    <button class="logout-btn" onclick="handleLogout()">Logout</button>
   </header>
 
   <div id="warningBanner" class="warning-banner" style="display: none;">
@@ -35,6 +35,54 @@
     &copy; 2025 Maintenance System. All rights reserved.
   </footer>
 
- 
+  <script>
+    // Check authentication on page load
+    function checkAuthentication() {
+      const userType = sessionStorage.getItem('user_type');
+      const isLoggedIn = sessionStorage.getItem('logged_in');
+      
+      if (!isLoggedIn || userType !== 'staff') {
+        alert('Access denied. Please login as staff.');
+        window.location.replace('../../index/html/login.html');
+        return false;
+      }
+      return true;
+    }
+
+    // Handle logout properly
+    function handleLogout() {
+      if (confirm('Are you sure you want to logout?')) {
+        // Clear all session data
+        sessionStorage.clear();
+        
+        // Clear remember me if needed
+        if (!confirm('Keep "Remember Me" for next login?')) {
+          localStorage.removeItem('rememberUser');
+        }
+        
+        // Redirect to logout script which will destroy PHP session
+        window.location.replace('../../index/html/logout.php');
+      }
+    }
+
+    // Initialize dashboard on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      // First check authentication
+      if (!checkAuthentication()) {
+        return; // Will redirect if not authenticated
+      }
+      
+      // Load user info
+      const userName = sessionStorage.getItem('user_name') || 'Staff Member';
+      console.log('Staff dashboard loaded for:', userName);
+    });
+
+    // Prevent browser cache issues
+    window.addEventListener('pageshow', function(event) {
+      if (event.persisted) {
+        window.location.reload();
+      }
+    });
+  </script>
 </body>
 </html>
