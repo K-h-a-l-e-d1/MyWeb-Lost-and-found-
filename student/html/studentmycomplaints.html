@@ -52,13 +52,20 @@
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
     
-    // Logout function
+    // Handle logout properly
     function logout() {
-      // Clear session data
-      localStorage.removeItem('auth');
-      
-      // Redirect to login page
-      window.location.href = '../../index/html/login.html';
+      if (confirm('Are you sure you want to logout?')) {
+        // Clear all session data
+        sessionStorage.clear();
+        
+        // Clear remember me if needed
+        if (!confirm('Keep "Remember Me" for next login?')) {
+          localStorage.removeItem('rememberUser');
+        }
+        
+        // Redirect to logout script which will destroy PHP session
+        window.location.replace('../../index/html/logout.php');
+      }
     }
   </script>
   <script src="../js/studentmycomplaints.js"></script>

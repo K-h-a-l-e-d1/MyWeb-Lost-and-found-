@@ -1,99 +1,190 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Unassigned Complaints - Admin</title>
-  <link rel="stylesheet" href="../css/adminunassignedcomplaints.css" />
-</head>
-<body>
-  <header>
-    <h1>Unassigned Complaints</h1>
-    <button class="logout-btn" onclick="logout()">Logout</button> <a href="../../index/html/index.html"></a>
-    <nav><a href="admindashboard.html">⬅️ Back to Dashboard</a></nav>
-  </header>
-
-  <main>
-    <!-- Category Filter Dropdown -->
-    <div class="filter-section">
-      <label for="categoryFilter">Select Category:</label>
-      <select id="categoryFilter" onchange="filterByCategory()">
-        <option value="">-- All Categories --</option>
-        <option value="Facilities">Facilities</option>
-        <option value="Technical Support">Technical Support</option>
-        <option value="Academic Issues">Academic Issues</option>
-        <option value="Administrative">Administrative</option>
-        <option value="Harassment/Bullying">Harassment/Bullying</option>
-        <option value="Lost">Other</option>
-      </select>
-    </div>
-
-    <!-- Complaints Table -->
-    <table>
-      <thead>
-        <tr>
-          <th>Select</th>
-          <th>ID</th>
-          <th>Category</th>
-          <th>Description</th>
-          <th>Date Submitted</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="adminunassignedComplaintsBody">
-        <!-- Rows inserted dynamically by JS -->
-      </tbody>
-    </table>
-
-    <!-- Assignment Section -->
-    <div class="assign-section">
-      <label for="staffSelect">Assign to:</label>
-      <select id="staffSelect">
-        <option value="">-- Select Staff --</option>
-        <option value="Abdullah Khan">Abdullah Khan</option>
-      </select>
-      <button onclick="assignComplaints()">Assign Selected</button>
-    </div>
-
-    <!-- Rejection Button -->
-    <div class="action-buttons">
-      <button onclick="openRejectModal()" class="reject-btn">Reject Selected</button>
-    </div>
-  </main>
-
-  <!-- Complaint View Modal -->
-  <div id="viewModal" class="modal">
-    <div class="modal-content">
-      <span class="modal-close" onclick="closeModal('viewModal')">&times;</span>
-      <div class="modal-header">Complaint Details</div>
-      <div class="modal-body">
-        <div class="modal-field"><strong>ID:</strong> <span id="viewId"></span></div>
-        <div class="modal-field"><strong>Category:</strong> <span id="viewCategory"></span></div>
-        <div class="modal-field"><strong>Description:</strong> <span id="viewDescription"></span></div>
-        <div class="modal-field"><strong>Date Submitted:</strong> <span id="viewDate"></span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Reject Confirmation Modal -->
-  <div id="rejectModal" class="modal">
-    <div class="modal-content">
-      <span class="modal-close" onclick="closeModal('rejectModal')">&times;</span>
-      <div class="modal-header">Confirm Rejection</div>
-      <div class="modal-body">
-        <p>Are you sure you want to reject the selected complaint(s)?</p>
-        <div class="modal-actions">
-          <button onclick="confirmReject()">Yes, Reject</button>
-          <button onclick="closeModal('rejectModal')">Cancel</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <footer>
-    <p>&copy; <span id="year"></span> Maintenance System</p>
-  </footer>
-
-  <script src="../js/adminworkprogress.js"></script>
-</body>
-</html>
++<html lang="en">
++<head>
++  <meta charset="UTF-8" />
++  <meta name="viewport" content="width=device-width, initial-scale=1" />
++  <title>Work Progress - Admin</title>
++  <link rel="stylesheet" href="../css/adminworkprogress.css" />
++</head>
++<body>
++  <header>
++    <h1>Work Progress Monitoring</h1>
++    <button class="logout-btn" onclick="logout()">Logout</button>
++    <nav><a href="admindashboard.html">⬅️ Back to Dashboard</a></nav>
++  </header>
++
++  <main>
++    <!-- Progress Overview Cards -->
++    <section class="progress-overview">
++      <div class="overview-card">
++        <div class="card-icon">📋</div>
++        <div class="card-content">
++          <h3 id="totalAssigned">0</h3>
++          <p>Total Assigned</p>
++        </div>
++      </div>
++      <div class="overview-card">
++        <div class="card-icon">⏳</div>
++        <div class="card-content">
++          <h3 id="inProgress">0</h3>
++          <p>In Progress</p>
++        </div>
++      </div>
++      <div class="overview-card">
++        <div class="card-icon">✅</div>
++        <div class="card-content">
++          <h3 id="completed">0</h3>
++          <p>Completed</p>
++        </div>
++      </div>
++      <div class="overview-card">
++        <div class="card-icon">⚠️</div>
++        <div class="card-content">
++          <h3 id="overdue">0</h3>
++          <p>Overdue</p>
++        </div>
++      </div>
++    </section>
++
++    <!-- Filters -->
++    <section class="filters">
++      <label for="staffFilter">Staff Member:</label>
++      <select id="staffFilter">
++        <option value="">All Staff</option>
++        <option value="Mike Johnson">Mike Johnson</option>
++        <option value="Bob Wilson">Bob Wilson</option>
++        <option value="Tom Davis">Tom Davis</option>
++      </select>
++
++      <label for="statusFilter">Status:</label>
++      <select id="statusFilter">
++        <option value="">All Status</option>
++        <option value="pending">Pending</option>
++        <option value="in-progress">In Progress</option>
++        <option value="completed">Completed</option>
++        <option value="overdue">Overdue</option>
++      </select>
++
++      <label for="fromDate">From:</label>
++      <input type="date" id="fromDate" />
++
++      <label for="toDate">To:</label>
++      <input type="date" id="toDate" />
++
++      <button onclick="applyFilters()">Apply Filters</button>
++      <button class="reset-btn" onclick="resetFilters()">Reset</button>
++    </section>
++
++    <!-- Work Progress Table -->
++    <section class="work-progress-table">
++      <table>
++        <thead>
++          <tr>
++            <th>Work ID</th>
++            <th>Type</th>
++            <th>Title</th>
++            <th>Assigned To</th>
++            <th>Assigned Date</th>
++            <th>Due Date</th>
++            <th>Status</th>
++            <th>Progress</th>
++            <th>Actions</th>
++          </tr>
++        </thead>
++        <tbody id="workProgressTableBody">
++          <!-- Work progress data will be populated here -->
++        </tbody>
++      </table>
++    </section>
++
++    <!-- Send Warning Section -->
++    <section class="warning-section">
++      <div class="warning-header">
++        <h3>Issue Warning to Staff</h3>
++        <p>Send warnings to staff members for overdue or poor performance</p>
++      </div>
++      <div class="warning-actions">
++        <button class="warning-btn" onclick="openWarningModal()">Send Warning</button>
++      </div>
++    </section>
++  </main>
++
++  <!-- Work Details Modal -->
++  <div id="workDetailsModal" class="modal">
++    <div class="modal-content">
++      <span class="modal-close" onclick="closeModal('workDetailsModal')">&times;</span>
++      <div class="modal-header">Work Details</div>
++      <div class="modal-body">
++        <div class="modal-field"><strong>Work ID:</strong> <span id="modal-work-id"></span></div>
++        <div class="modal-field"><strong>Type:</strong> <span id="modal-work-type"></span></div>
++        <div class="modal-field"><strong>Title:</strong> <span id="modal-work-title"></span></div>
++        <div class="modal-field"><strong>Description:</strong> <div class="work-description" id="modal-work-description"></div></div>
++        <div class="modal-field"><strong>Assigned To:</strong> <span id="modal-assigned-to"></span></div>
++        <div class="modal-field"><strong>Assigned Date:</strong> <span id="modal-assigned-date"></span></div>
++        <div class="modal-field"><strong>Due Date:</strong> <span id="modal-due-date"></span></div>
++        <div class="modal-field"><strong>Status:</strong> <span id="modal-work-status"></span></div>
++        <div class="modal-field"><strong>Progress Notes:</strong> <div class="progress-notes" id="modal-progress-notes"></div></div>
++      </div>
++    </div>
++  </div>
++
++  <!-- Send Warning Modal -->
++  <div id="sendWarningModal" class="modal">
++    <div class="modal-content">
++      <span class="modal-close" onclick="closeModal('sendWarningModal')">&times;</span>
++      <div class="modal-header">Send Warning to Staff</div>
++      <div class="modal-body">
++        <form id="warningForm">
++          <div class="modal-field">
++            <label for="warningStaff">Select Staff:</label>
++            <select id="warningStaff" required>
++              <option value="">-- Select Staff --</option>
++              <option value="Mike Johnson">Mike Johnson</option>
++              <option value="Bob Wilson">Bob Wilson</option>
++              <option value="Tom Davis">Tom Davis</option>
++            </select>
++          </div>
++          <div class="modal-field">
++            <label for="warningType">Warning Type:</label>
++            <select id="warningType" required>
++              <option value="">-- Select Type --</option>
++              <option value="late_completion">Late Completion</option>
++              <option value="poor_quality">Poor Quality Work</option>
++              <option value="missed_deadline">Missed Deadline</option>
++              <option value="other">Other</option>
++            </select>
++          </div>
++          <div class="modal-field">
++            <label for="warningMessage">Warning Message:</label>
++            <textarea id="warningMessage" rows="4" placeholder="Enter warning message..." required></textarea>
++          </div>
++        </form>
++      </div>
++      <div class="modal-actions">
++        <button class="modal-btn cancel-btn" onclick="closeModal('sendWarningModal')">Cancel</button>
++        <button class="modal-btn send-btn" onclick="sendWarning()">Send Warning</button>
++      </div>
++    </div>
++  </div>
++
++  <footer>
++    <p>&copy; <span id="year"></span> Digital Complaint & Maintenance System</p>
++  </footer>
++
++  <script>
++    document.getElementById("year").textContent = new Date().getFullYear();
++
++    // Global logout function
++    function logout() {
++      if (confirm('Are you sure you want to logout?')) {
++        sessionStorage.clear();
++        if (!confirm('Keep "Remember Me" for next login?')) {
++          localStorage.removeItem('rememberUser');
++        }
++        window.location.replace('../../index/html/logout.php');
++      }
++    }
++  </script>
++  <script src="../js/adminworkprogress.js"></script>
++</body>
++</html>
