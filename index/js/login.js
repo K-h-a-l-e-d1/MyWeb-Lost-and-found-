@@ -1,19 +1,24 @@
-// Login Form Handler - Ready for PHP Integration
+// Login Form Handler - Fixed with Proper Session Management
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('loginForm');
     const loginBtn = document.querySelector('.login-btn');
-    const btnText = document.querySelector('.btn-text');
     const passwordToggle = document.getElementById('passwordToggle');
     const passwordInput = document.getElementById('password');
     
+    // Clear any existing sessions when accessing login page
+    clearPreviousSession();
+    
+    // Test connection on page load
+    testConnection();
+    
     // Password visibility toggle
-    passwordToggle.addEventListener('click', function() {
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
-        
-        // Toggle icon
-        this.textContent = type === 'password' ? '👁️' : '🙈';
-    });
+    if (passwordToggle && passwordInput) {
+        passwordToggle.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.textContent = type === 'password' ? '👁️' : '🙈';
+        });
+    }
     
     // Input validation and styling
     const inputs = document.querySelectorAll('input, select');
@@ -29,22 +34,46 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Form submission handler
-    loginForm.addEventListener('submit', function(e) {
-        e.preventDefault();
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            console.log('Form submitted, gathering data...');
+            
+            // Get form data
+            const formData = {
+                email: document.getElementById('email')?.value?.trim() || '',
+                password: document.getElementById('password')?.value || '',
+                userType: document.getElementById('userType')?.value || '',
+                rememberMe: document.getElementById('rememberMe')?.checked || false
+            };
+            
+            console.log('Form data collected:', {
+                email: formData.email,
+                userType: formData.userType,
+                rememberMe: formData.rememberMe,
+                passwordLength: formData.password.length
+            });
+            
+            // Validate all fields
+            if (validateForm(formData)) {
+                submitLogin(formData);
+            }
+        });
+    }
+    
+    // Clear previous session function
+    function clearPreviousSession() {
+        // Clear sessionStorage
+        sessionStorage.removeItem('user_id');
+        sessionStorage.removeItem('user_name');
+        sessionStorage.removeItem('user_email');
+        sessionStorage.removeItem('user_type');
+        sessionStorage.removeItem('logged_in');
+        sessionStorage.removeItem('login_time');
         
-        // Get form data
-        const formData = {
-            email: document.getElementById('email').value.trim(),
-            password: document.getElementById('password').value,
-            userType: document.getElementById('userType').value,
-            rememberMe: document.getElementById('rememberMe').checked
-        };
-        
-        // Validate all fields
-        if (validateForm(formData)) {
-            submitLogin(formData);
-        }
-    });
+        console.log('Previous session data cleared');
+    }
     
     // Field validation function
     function validateField(field) {
@@ -67,8 +96,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!value) {
                     errorMessage = 'Password is required';
                     isValid = false;
-                } else if (value.length < 6) {
-                    errorMessage = 'Password must be at least 6 characters';
+                } else if (value.length < 1) {
+                    errorMessage = 'Password cannot be empty';
                     isValid = false;
                 }
                 break;
@@ -95,12 +124,10 @@ document.addEventListener('DOMContentLoaded', function() {
         let isValid = true;
         
         // Validate each field
-        Object.keys(data).forEach(key => {
-            if (key !== 'rememberMe') {
-                const field = document.getElementById(key);
-                if (!validateField(field)) {
-                    isValid = false;
-                }
+        ['email', 'password', 'userType'].forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field && !validateField(field)) {
+                isValid = false;
             }
         });
         
@@ -141,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Submit login data to PHP
     function submitLogin(formData) {
-        // Show loading state
+        console.log('Starting login submission...');
         showLoading(true);
         
         // Create form data for PHP
@@ -151,61 +178,129 @@ document.addEventListener('DOMContentLoaded', function() {
         phpFormData.append('userType', formData.userType);
         phpFormData.append('rememberMe', formData.rememberMe);
         
+        console.log('Sending login request to login.php...');
+        
         // Send to PHP login handler
-        fetch('login_handler.php', {
+        fetch('login.php', {
             method: 'POST',
             body: phpFormData
         })
-        .then(response => response.json())
-        .then(data => {
-            showLoading(false);
+        .then(response => {
+            console.log('Response received:', response.status, response.statusText);
             
-            if (data.success) {
-                // Success - redirect to dashboard
-                showSuccess('Login successful! Redirecting...');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            return response.text(); // Get as text first
+        })
+        .then(text => {
+            console.log('Raw response text:', text);
+            
+            // Try to parse as JSON
+            try {
+                const data = JSON.parse(text);
+                console.log('Parsed JSON response:', data);
+                handleLoginResponse(data, formData);
+            } catch (e) {
+                console.error('JSON parse error:', e);
+                console.error('Response was:', text);
                 
-                // Store session data if needed
-                if (formData.rememberMe) {
-                    localStorage.setItem('rememberUser', formData.email);
+                // Check if response contains HTML (error page)
+                if (text.includes('<html>') || text.includes('<!DOCTYPE')) {
+                    showLoginError('Server error: Received HTML instead of JSON. Check PHP configuration.');
+                } else {
+                    showLoginError('Server returned invalid response: ' + text.substring(0, 100));
                 }
-                
-                // Redirect after short delay
-                setTimeout(() => {
-                    window.location.href = data.redirectUrl;
-                }, 1500);
-                
-            } else {
-                // Show error message
-                showLoginError(data.message || 'Login failed. Please try again.');
             }
         })
         .catch(error => {
+            console.error('Fetch error:', error);
+            showLoginError('Connection error: ' + error.message);
+        })
+        .finally(() => {
             showLoading(false);
-            console.error('Login error:', error);
-            showLoginError('Connection error. Please try again.');
         });
+    }
+    
+    // Handle login response
+    function handleLoginResponse(data, formData) {
+        console.log('Handling login response:', data);
+        
+        if (data.success) {
+            // Store user information in sessionStorage for dashboard use
+            if (data.user) {
+                sessionStorage.setItem('user_id', data.user.id);
+                sessionStorage.setItem('user_name', data.user.name);
+                sessionStorage.setItem('user_email', data.user.email);
+                sessionStorage.setItem('user_type', data.user.type);
+                sessionStorage.setItem('logged_in', 'true');
+                sessionStorage.setItem('login_time', new Date().toISOString());
+                
+                console.log('User data stored in sessionStorage:', {
+                    id: data.user.id,
+                    name: data.user.name,
+                    email: data.user.email,
+                    type: data.user.type
+                });
+            }
+            
+            // Success
+            showSuccess(data.message || 'Login successful! Redirecting to your dashboard...');
+            
+            // Store remember me preference
+            if (formData.rememberMe) {
+                localStorage.setItem('rememberUser', formData.email);
+                console.log('Remember me preference saved');
+            } else {
+                localStorage.removeItem('rememberUser');
+            }
+            
+            // Redirect after short delay
+            setTimeout(() => {
+                console.log('Redirecting to:', data.redirectUrl);
+                if (data.redirectUrl) {
+                    // Replace current page in history to prevent back button issues
+                    window.location.replace(data.redirectUrl);
+                } else {
+                    // Fallback redirect based on user type
+                    const fallbackUrls = {
+                        'admin': '../admin/html/admindashboard.html',
+                        'staff': '../maintenancestaff/html/maintenancestaffdashboard.html',
+                        'student': '../student/html/studentdashboard.html'
+                    };
+                    const redirectUrl = fallbackUrls[formData.userType] || '../student/html/studentdashboard.html';
+                    console.log('Using fallback redirect:', redirectUrl);
+                    window.location.replace(redirectUrl);
+                }
+            }, 1500);
+            
+        } else {
+            // Show error message
+            showLoginError(data.message || 'Login failed. Please try again.');
+        }
     }
     
     // Show loading state
     function showLoading(show) {
-        if (show) {
-            loginBtn.classList.add('loading');
-            loginBtn.disabled = true;
-        } else {
-            loginBtn.classList.remove('loading');
-            loginBtn.disabled = false;
+        if (loginBtn) {
+            if (show) {
+                loginBtn.classList.add('loading');
+                loginBtn.disabled = true;
+            } else {
+                loginBtn.classList.remove('loading');
+                loginBtn.disabled = false;
+            }
         }
     }
     
     // Show success message
     function showSuccess(message) {
-        // Create and show success notification
         showNotification(message, 'success');
     }
     
     // Show login error
     function showLoginError(message) {
-        // Create and show error notification
         showNotification(message, 'error');
     }
     
@@ -237,79 +332,132 @@ document.addEventListener('DOMContentLoaded', function() {
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             z-index: 1000;
             animation: slideInRight 0.3s ease-out;
-            max-width: 300px;
+            max-width: 400px;
+            word-wrap: break-word;
         `;
         
         // Add to page
         document.body.appendChild(notification);
         
-        // Auto remove after 5 seconds
+        // Auto remove after timeout
+        const timeout = type === 'error' ? 8000 : 5000;
         setTimeout(() => {
-            notification.style.animation = 'slideOutRight 0.3s ease-out';
-            setTimeout(() => notification.remove(), 300);
-        }, 5000);
+            if (notification.parentNode) {
+                notification.style.animation = 'slideOutRight 0.3s ease-out';
+                setTimeout(() => notification.remove(), 300);
+            }
+        }, timeout);
     }
     
-    // Check for remembered user
+    // Check for remembered user (only email, not auto-login)
     const rememberedUser = localStorage.getItem('rememberUser');
     if (rememberedUser) {
-        document.getElementById('email').value = rememberedUser;
-        document.getElementById('rememberMe').checked = true;
+        const emailField = document.getElementById('email');
+        const rememberCheckbox = document.getElementById('rememberMe');
+        if (emailField) {
+            emailField.value = rememberedUser;
+            console.log('Loaded remembered user:', rememberedUser);
+        }
+        if (rememberCheckbox) {
+            rememberCheckbox.checked = true;
+        }
     }
     
     // Add notification animations to CSS dynamically
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
+    if (!document.getElementById('login-animations')) {
+        const style = document.createElement('style');
+        style.id = 'login-animations';
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
             }
-            to {
-                transform: translateX(0);
-                opacity: 1;
+            
+            @keyframes slideOutRight {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
             }
-        }
-        
-        @keyframes slideOutRight {
-            from {
-                transform: translateX(0);
-                opacity: 1;
+            
+            .notification-content {
+                display: flex;
+                align-items: center;
+                gap: 10px;
             }
-            to {
-                transform: translateX(100%);
-                opacity: 0;
+            
+            .notification-icon {
+                font-size: 18px;
             }
-        }
-        
-        .notification-content {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .notification-icon {
-            font-size: 18px;
-        }
-        
-        .notification-message {
-            font-weight: 500;
-        }
-    `;
-    document.head.appendChild(style);
+            
+            .notification-message {
+                font-weight: 500;
+            }
+        `;
+        document.head.appendChild(style);
+    }
 });
 
-// Auto-redirect if already logged in (check PHP session)
-window.addEventListener('load', function() {
-    // Check if user is already logged in via PHP session
-    fetch('check_session.php')
-        .then(response => response.json())
-        .then(data => {
-            if (data.loggedIn) {
-                window.location.href = data.dashboardUrl;
+// Test database connection
+function testConnection() {
+    console.log('Testing server connection...');
+    
+    fetch('login.php', {
+        method: 'POST',
+        body: new FormData() // Empty form data to test connection
+    })
+    .then(response => response.text())
+    .then(text => {
+        console.log('Server connection test response:', text);
+        try {
+            const data = JSON.parse(text);
+            if (data.success) {
+                console.log('✅ Server connection successful');
             }
-        })
-        .catch(error => {
-            console.log('Session check failed:', error);
-        });
+        } catch (e) {
+            console.log('❌ Server connection test failed - non-JSON response');
+        }
+    })
+    .catch(error => {
+        console.error('❌ Server connection test failed:', error);
+    });
+}
+
+// Auto-focus email field on page load
+window.addEventListener('load', function() {
+    const emailField = document.getElementById('email');
+    if (emailField && !emailField.value) {
+        emailField.focus();
+    }
 });
+
+// FIXED: Prevent browser caching and auto-login issues
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        // Page was loaded from cache, reload it
+        window.location.reload();
+    }
+});
+
+// FIXED: Clear session when navigating to login page
+window.addEventListener('beforeunload', function() {
+    // Only clear if we're navigating away from login to another page
+    // This prevents the auto-login loop
+});
+
+// Prevent back button auto-login by checking URL
+if (window.location.pathname.includes('login.html')) {
+    // Clear session storage to prevent auto-login
+    sessionStorage.removeItem('logged_in');
+    sessionStorage.removeItem('user_type');
+}

@@ -13,61 +13,33 @@
         <div class="logo-container">
           <div class="logo-icon">🔧</div>
         </div>
-        <h2>Reset Password</h2>
-        <p class="subtitle">Enter your email to get reset code</p>
+        <h2>Password Reset</h2>
+        <p class="subtitle">Contact Administrator</p>
       </div>
 
-      
-      <div id="emailStep" class="step active">
-        <form id="forgotForm" class="forgot-form">
-          <div class="input-group">
-            <div class="input-container">
-              <span class="input-icon">📧</span>
-              <input type="email" id="email" placeholder="Enter your email address" required>
-            </div>
-            <div class="error-message" id="emailError"></div>
+      <div id="infoStep" class="step active">
+        <div class="info-content">
+          <div class="info-icon">📧</div>
+          <h3>Password Reset Unavailable</h3>
+          <p class="info-message">
+            The password reset feature is currently disabled. 
+            <br><br>
+            <strong>To change your password:</strong>
+          </p>
+          <ul class="contact-info">
+            <li>📞 Contact your system administrator</li>
+            <li>🏢 Visit the IT support office</li>
+            <li>📧 Send an email to: <strong>admin@yourschool.com</strong></li>
+          </ul>
+          
+          <div class="admin-note">
+            <p><strong>Note:</strong> Please provide your email address and user type when contacting support.</p>
           </div>
+        </div>
 
-          <button type="submit" class="submit-btn">
-            <span class="btn-text">Send Reset Code</span>
-            <div class="btn-loader"></div>
-          </button>
-
-          <div class="back-to-login">
-            <a href="login.html" class="back-link">← Back to Login</a>
-          </div>
-        </form>
-      </div>
-
-      
-      <div id="resetStep" class="step">
-        <form id="resetForm" class="reset-form">
-          <div class="input-group">
-            <div class="input-container">
-              <span class="input-icon">🔢</span>
-              <input type="text" id="resetCode" placeholder="Enter 6-digit reset code" maxlength="6" required>
-            </div>
-            <div class="error-message" id="resetCodeError"></div>
-          </div>
-
-          <div class="input-group">
-            <div class="input-container">
-              <span class="input-icon">🔒</span>
-              <input type="password" id="newPassword" placeholder="Enter new password" required>
-              <button type="button" class="password-toggle" id="passwordToggle">👁️</button>
-            </div>
-            <div class="error-message" id="newPasswordError"></div>
-          </div>
-
-          <button type="submit" class="submit-btn">
-            <span class="btn-text">Reset Password</span>
-            <div class="btn-loader"></div>
-          </button>
-
-          <div class="back-to-login">
-            <a href="#" id="backToEmail" class="back-link">← Change Email</a>
-          </div>
-        </form>
+        <div class="back-to-login">
+          <a href="login.html" class="back-link">← Back to Login</a>
+        </div>
       </div>
 
       <div class="footer-note">
@@ -76,7 +48,6 @@
     </div>
   </div>
 
-  <script src="../js/forgotpass.js"></script>
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
