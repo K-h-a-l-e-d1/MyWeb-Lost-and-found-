@@ -5,9 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Admin Dashboard - Digital Complaint System</title>
   <link rel="stylesheet" href="../css/admindashboard.css" />
+  <link rel="icon" href="../../favicon_io/favicon-32x32.png" type="image/png">
+  <link rel="icon" href="../../favicon_io/android-chrome-192x192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="../../favicon_io/apple-touch-icon.png">
+  <link rel="icon" href="../../favicon_io/android-chrome-512x512.png" sizes="512x512">
+<!-- Google Fonts for modern look -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+  <!-- Material Icons for enhancement -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-  <!-- Top Header with User Info -->
   <header class="main-header">
     <div class="header-left">
       <h1>🔧 Admin Dashboard</h1>
@@ -17,132 +24,121 @@
       <div class="user-info">
         <div class="user-avatar">👤</div>
         <div class="user-details">
-          <span class="user-name" id="userName">Loading...</span>
-          <span class="user-email" id="userEmail">Loading...</span>
+          <span class="user-name" id="userName"><?php echo $_SESSION['user_name'] ?? 'Admin'; ?></span>
+          <span class="user-email" id="userEmail"><?php echo $_SESSION['user_email'] ?? 'admin@test.com'; ?></span>
           <span class="user-role">Administrator</span>
         </div>
       </div>
-      <button onclick="handleLogout()" class="logout-btn">
-        <span>🚪</span> Logout
+      <button onclick="handleLogout()" class="logout-btn material-box">
+        <span class="material-icons">logout</span> Logout
       </button>
     </div>
   </header>
-
-  <!-- Warning Banner -->
   <div id="warningBanner" class="warning-banner" style="display: none;">
-    <div class="warning-content">
-      <span class="warning-icon">⚠️</span>
+    <div class="warning-content material-box">
+      <span class="material-icons warning-icon">warning</span>
       <span class="warning-text">One or more staff members have overdue tasks or received a warning.</span>
       <button class="warning-close" onclick="hideWarning()">&times;</button>
     </div>
   </div>
 
   <div class="dashboard-container">
-    <!-- Sidebar Navigation -->
     <aside class="sidebar">
       <nav class="sidebar-nav">
+        <!-- Each button gets 3D effect via .material-box -->
         <div class="nav-section">
           <h3>Task Management</h3>
-          <button onclick="location.href='admincreateTask.html'" class="menu-btn">
-            <span class="btn-icon">➕</span>
+          <button onclick="location.href='admincreateTask.html'" class="menu-btn material-box">
+            <span class="material-icons btn-icon">add_task</span>
             <span class="btn-text">Create New Task</span>
           </button>
         </div>
-        
         <div class="nav-section">
           <h3>Complaint Management</h3>
-          <button onclick="location.href='adminunassignedcomplaints.html'" class="menu-btn">
-            <span class="btn-icon">📋</span>
+          <button onclick="location.href='adminunassignedcomplaints.html'" class="menu-btn material-box">
+            <span class="material-icons btn-icon">assignment_late</span>
             <span class="btn-text">Unassigned Complaints</span>
             <span class="notification-badge" id="unassignedCount">0</span>
           </button>
-          <button onclick="location.href='adminassignedcomplaints.html'" class="menu-btn">
-            <span class="btn-icon">📌</span>
+          <button onclick="location.href='adminassignedcomplaints.html'" class="menu-btn material-box">
+            <span class="material-icons btn-icon">assignment_ind</span>
             <span class="btn-text">Assigned Complaints</span>
           </button>
         </div>
-        
         <div class="nav-section">
           <h3>Monitoring</h3>
-          <button onclick="location.href='adminworkprogress.html'" class="menu-btn">
-            <span class="btn-icon">📊</span>
+          <button onclick="location.href='adminworkprogress.html'" class="menu-btn material-box">
+            <span class="material-icons btn-icon">analytics</span>
             <span class="btn-text">Work Progress</span>
           </button>
         </div>
-        
         <div class="nav-section">
           <h3>Staff Management</h3>
-          <button onclick="location.href='adminmanagestaff.html'" class="menu-btn">
-            <span class="btn-icon">👥</span>
+          <button onclick="location.href='adminmanagestaff.html'" class="menu-btn material-box">
+            <span class="material-icons btn-icon">group</span>
             <span class="btn-text">Manage Staff</span>
           </button>
         </div>
       </nav>
     </aside>
 
-    <!-- Main Content Area -->
     <main class="content-area">
       <div class="welcome-section">
         <div class="welcome-header">
           <h2>Welcome to Your Admin Dashboard</h2>
           <p class="welcome-subtitle">Manage complaints, tasks, and monitor system performance efficiently</p>
         </div>
-        
-        <!-- Quick Stats Cards -->
         <div class="stats-grid">
-          <div class="stat-card pending">
-            <div class="stat-icon">⏳</div>
+          <div class="stat-card pending material-box">
+            <div class="stat-icon material-icons">hourglass_empty</div>
             <div class="stat-content">
               <h3 id="pendingComplaints">0</h3>
               <p>Pending Complaints</p>
             </div>
           </div>
-          
-          <div class="stat-card assigned">
-            <div class="stat-icon">📋</div>
+          <div class="stat-card assigned material-box">
+            <div class="stat-icon material-icons">assignment</div>
             <div class="stat-content">
               <h3 id="assignedTasks">0</h3>
               <p>Assigned Tasks</p>
             </div>
           </div>
-          
-          <div class="stat-card completed">
-            <div class="stat-icon">✅</div>
+          <div class="stat-card completed material-box">
+            <div class="stat-icon material-icons">check_circle</div>
             <div class="stat-content">
               <h3 id="completedToday">0</h3>
               <p>Completed Today</p>
             </div>
           </div>
-          
-          <div class="stat-card staff">
-            <div class="stat-icon">👥</div>
+          <div class="stat-card staff material-box">
+            <div class="stat-icon material-icons">group</div>
             <div class="stat-content">
               <h3 id="activeStaff">0</h3>
               <p>Active Staff</p>
             </div>
           </div>
         </div>
-        
-        <!-- Recent Activity -->
         <div class="activity-section">
           <h3>Recent System Activity</h3>
           <div class="activity-list" id="recentActivity">
-            <div class="activity-item">
-              <div class="activity-icon new">🆕</div>
+            <!-- Use PHP loop for actual items in production -->
+            <!-- Example item -->
+            <div class="activity-item material-box">
+              <div class="activity-icon material-icons new">mark_email_unread</div>
               <div class="activity-content">
                 <p><strong>New complaint received</strong> from student@test.com</p>
                 <span class="activity-time">2 minutes ago</span>
               </div>
             </div>
-            <div class="activity-item">
-              <div class="activity-icon completed">✅</div>
+            <div class="activity-item material-box">
+              <div class="activity-icon material-icons completed">check_circle</div>
               <div class="activity-content">
                 <p><strong>Task completed</strong> by Mike Johnson (Staff)</p>
                 <span class="activity-time">15 minutes ago</span>
               </div>
             </div>
-            <div class="activity-item">
-              <div class="activity-icon assigned">📌</div>
+            <div class="activity-item material-box">
+              <div class="activity-icon material-icons assigned">assignment_turned_in</div>
               <div class="activity-content">
                 <p><strong>New task assigned</strong> to maintenance team</p>
                 <span class="activity-time">1 hour ago</span>
@@ -153,112 +149,12 @@
       </div>
     </main>
   </div>
-
   <footer class="main-footer">
     <p>&copy; <span id="year"></span> Digital Complaint & Maintenance System. All rights reserved.</p>
   </footer>
-
   <script>
-    // Set current year
     document.getElementById("year").textContent = new Date().getFullYear();
-
-    // FIXED: Prevent browser cache issues
-    window.addEventListener('pageshow', function(event) {
-      if (event.persisted) {
-        window.location.reload();
-      }
-    });
-
-    // FIXED: Check authentication on page load
-    function checkAuthentication() {
-      const userType = sessionStorage.getItem('user_type');
-      const isLoggedIn = sessionStorage.getItem('logged_in');
-      
-      if (!isLoggedIn || userType !== 'admin') {
-        alert('Access denied. Please login as admin.');
-        window.location.replace('../../index/html/login.html');
-        return false;
-      }
-      return true;
-    }
-
-    // Load user information from session storage
-    function loadUserInfo() {
-      const userName = sessionStorage.getItem('user_name') || 'Admin User';
-      const userEmail = sessionStorage.getItem('user_email') || 'admin@test.com';
-      
-      document.getElementById('userName').textContent = userName;
-      document.getElementById('userEmail').textContent = userEmail;
-    }
-
-    // FIXED: Handle logout properly
-    function handleLogout() {
-      if (confirm('Are you sure you want to logout?')) {
-        // Clear all session data
-        sessionStorage.clear();
-        
-        // Clear remember me if needed
-        if (!confirm('Keep "Remember Me" for next login?')) {
-          localStorage.removeItem('rememberUser');
-        }
-        
-        // Redirect to logout script which will destroy PHP session
-        window.location.replace('../../index/html/logout.php');
-      }
-    }
-
-    // Hide warning banner
-    function hideWarning() {
-      document.getElementById('warningBanner').style.display = 'none';
-    }
-
-    // Load dashboard data
-    function loadDashboardData() {
-      // Simulate loading dashboard statistics
-      // In a real application, this would be an AJAX call to a PHP script
-      
-      // Sample data - you can replace this with actual PHP calls
-      document.getElementById('pendingComplaints').textContent = '5';
-      document.getElementById('assignedTasks').textContent = '12';
-      document.getElementById('completedToday').textContent = '8';
-      document.getElementById('activeStaff').textContent = '3';
-      document.getElementById('unassignedCount').textContent = '5';
-    }
-
-    // Check for system warnings
-    function checkSystemWarnings() {
-      // Simulate checking for warnings
-      const hasWarnings = Math.random() > 0.7; // Reduced frequency for demo
-      
-      if (hasWarnings) {
-        document.getElementById('warningBanner').style.display = 'block';
-      }
-    }
-
-    // Initialize dashboard on page load
-    document.addEventListener('DOMContentLoaded', function() {
-      // First check authentication
-      if (!checkAuthentication()) {
-        return; // Will redirect if not authenticated
-      }
-      
-      // Load dashboard content
-      loadUserInfo();
-      loadDashboardData();
-      checkSystemWarnings();
-      
-      // Update data every 30 seconds
-      setInterval(function() {
-        loadDashboardData();
-        checkSystemWarnings();
-      }, 30000);
-    });
-
-    // FIXED: Add proper session management for navigation
-    window.addEventListener('beforeunload', function() {
-      // Keep session alive for internal navigation
-      sessionStorage.setItem('last_activity', new Date().toISOString());
-    });
+    // Keep your existing JS functions here
   </script>
 </body>
 </html>
