@@ -36,7 +36,41 @@ h1, h2, h3 {
   display: flex;
   gap: 1em;
   align-items: center;
+  
 }
+/* Logo Styles */
+.header-logo {
+  display: inline-block;
+  margin-right: 20px; /* Space between logo and title */
+}
+
+.logo {
+  width: 120px;  /* Adjust the width of the logo */
+  height: auto;
+  vertical-align: middle; /* Align logo with the title text */
+}
+
+/* Header Styling */
+.main-header {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #475569 0%, #334155 100%);
+  color: white;
+  padding: 24px 40px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.header-left {
+  display: flex;
+  align-items: center; /* Aligns the title with the logo */
+  margin-left: 10px;
+}
+
+.header-left h1 {
+  margin: 0;
+  margin-left: 10px; /* Space between logo and title */
+}
+
 .user-info {
   display: flex;
   align-items: center;

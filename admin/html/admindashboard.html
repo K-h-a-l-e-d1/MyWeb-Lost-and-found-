@@ -9,17 +9,23 @@
   <link rel="icon" href="../../favicon_io/android-chrome-192x192.png" sizes="192x192">
   <link rel="apple-touch-icon" href="../../favicon_io/apple-touch-icon.png">
   <link rel="icon" href="../../favicon_io/android-chrome-512x512.png" sizes="512x512">
-<!-- Google Fonts for modern look -->
+  <!-- Google Fonts for modern look -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
   <!-- Material Icons for enhancement -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
   <header class="main-header">
+    <!-- Removed wrench icon and added your logo -->
+    <div class="header-logo">
+      <img src="../../Images/my logo.jpg" alt="Digital Maintenance System Logo" class="logo">
+    </div>
+    
     <div class="header-left">
-      <h1>🔧 Admin Dashboard</h1>
+      <h1>Admin Dashboard</h1>
       <span class="system-name">Digital Complaint & Maintenance System</span>
     </div>
+
     <div class="header-right">
       <div class="user-info">
         <div class="user-avatar">👤</div>
@@ -34,6 +40,7 @@
       </button>
     </div>
   </header>
+
   <div id="warningBanner" class="warning-banner" style="display: none;">
     <div class="warning-content material-box">
       <span class="material-icons warning-icon">warning</span>
@@ -149,6 +156,7 @@
       </div>
     </main>
   </div>
+
   <footer class="main-footer">
     <p>&copy; <span id="year"></span> Digital Complaint & Maintenance System. All rights reserved.</p>
   </footer>

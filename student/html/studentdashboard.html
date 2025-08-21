@@ -2,39 +2,73 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Student Dashboard</title>
+  <link rel="icon" href="../../favicon_io/favicon-32x32.png" type="image/png">
+  <link rel="icon" href="../../favicon_io/android-chrome-192x192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="../../favicon_io/apple-touch-icon.png">
+  <link rel="icon" href="../../favicon_io/android-chrome-512x512.png" sizes="512x512">
   <link rel="stylesheet" href="../css/studentdashboard.css" />
+  <!-- Google Fonts for modern look -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+  <!-- Material Icons for enhancement -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <h1>Student Dashboard</h1>
-    <button class="logout-btn" onclick="handleLogout()">Logout</button>
+  <header class="main-header">
+    <div class="header-logo">
+      <img src="../../Images/my logo.jpg" alt="Logo" class="logo">
+    </div>
+    <div class="header-left">
+      <h1>Student Dashboard</h1>
+      <span class="system-name">Digital Complaint & Maintenance System</span>
+    </div>
+    <div class="header-right">
+      <div class="user-info material-box">
+        <div class="user-avatar">🎓</div>
+        <div class="user-details">
+          <span class="user-name" id="userName">Student</span>
+          <span class="user-email" id="userEmail">student@test.com</span>
+          <span class="user-role">Student</span>
+        </div>
+      </div>
+      <button class="logout-btn material-box" onclick="handleLogout()">
+        <span class="material-icons">logout</span> Logout
+      </button>
+    </div>
   </header>
-  
+
+  <div id="warningBanner" class="warning-banner material-box" style="display: none;">
+    <div class="warning-content">
+      <span class="material-icons warning-icon">warning</span>
+      <span class="warning-text">One or more of your complaints have been marked as overdue.</span>
+      <button class="warning-close" onclick="hideWarning()">&times;</button>
+    </div>
+  </div>
 
   <div class="dashboard-container">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <button onclick="location.href='studentfilecomplaint.html'" class="menu-btn">File a New Complaint</button>
-      <button onclick="location.href='studentmycomplaints.html'" class="menu-btn">My Complaints</button>
+    <aside class="sidebar material-box">
+      <button class="menu-btn material-box" onclick="location.href='studentfilecomplaint.html'">
+        <span class="material-icons btn-icon">add_task</span>
+        <span class="btn-text">File New Complaint</span>
+      </button>
+      <button class="menu-btn material-box" onclick="location.href='studentmycomplaints.html'">
+        <span class="material-icons btn-icon">assignment_ind</span>
+        <span class="btn-text">My Complaints</span>
+      </button>
     </aside>
 
-    <!-- Main Content -->
     <main class="content-area">
       <div class="content-header">
-        <h2>Welcome to the Student Dashboard</h2>
+        <h2>Welcome to Your Dashboard</h2>
+        <p>Submit maintenance requests and track your complaints efficiently.</p>
       </div>
     </main>
   </div>
-
-  <footer>
-    <p>&copy; <span id="year"></span> Maintenance System</p>
+   <footer class="main-footer material-box">
+    &copy; 2025 Digital Complaint & Maintenance System. All rights reserved.
   </footer>
-
   <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-
     // Check authentication on page load
     function checkAuthentication() {
       const userType = sessionStorage.getItem('user_type');
@@ -59,38 +93,24 @@
           localStorage.removeItem('rememberUser');
         }
         
-        // Redirect to logout script which will destroy PHP session
+        // Redirect to logout script
         window.location.replace('../../index/html/logout.php');
       }
     }
 
     // Initialize dashboard on page load
     document.addEventListener('DOMContentLoaded', function() {
-      // First check authentication
       if (!checkAuthentication()) {
-        return; // Will redirect if not authenticated
+        return;
       }
       
       // Load user info
       const userName = sessionStorage.getItem('user_name') || 'Student';
-      console.log('Student dashboard loaded for:', userName);
+      const userEmail = sessionStorage.getItem('user_email') || 'student@test.com';
+      
+      document.getElementById('userName').textContent = userName;
+      document.getElementById('userEmail').textContent = userEmail;
     });
-
-    // Prevent browser cache issues
-    window.addEventListener('pageshow', function(event) {
-      if (event.persisted) {
-        window.location.reload();
-      }
-    });
-
-    // Keep session alive for internal navigation
-    window.addEventListener('beforeunload', function() {
-      sessionStorage.setItem('last_activity', new Date().toISOString());
-    });
-  </script>
-</body>
-</html>
-    }
   </script>
 </body>
 </html>
