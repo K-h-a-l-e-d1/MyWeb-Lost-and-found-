@@ -185,8 +185,8 @@ Having issues or questions? We're here to help!
 
 Special thanks to all contributors who have helped make this project better:
 
-- **Project Lead** - Your Name
-- **Technical Supervisor** - Supervisor's Name
+- **Project Build ** - Khaled Masud
+- **Project Supervisor** - Mr. Farhan Tanvir Khan. Github[https://github.com/ftkovr9k]
 - **Contributors** - All amazing developers who contributed
 
 ---
