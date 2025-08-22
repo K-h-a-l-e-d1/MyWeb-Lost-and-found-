@@ -48,7 +48,7 @@ The **Digital Complaint & Maintenance System** revolutionizes how organizations 
 ### Notifications & Alerts
 - **Email Notifications** - Automated email updates
 - **Real-time Alerts** - Instant notifications for status changes
-- **Mobile Notifications** - Push notifications for mobile users
+
 
 ### Analytics & Reporting
 - **Performance Metrics** - Detailed analytics dashboard
